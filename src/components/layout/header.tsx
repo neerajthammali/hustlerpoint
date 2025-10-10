@@ -20,11 +20,6 @@ const navLinks = [
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
-  const pathname = usePathname();
-
-  if (pathname.startsWith('/admin')) {
-    return null;
-  }
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
