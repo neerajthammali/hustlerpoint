@@ -20,13 +20,16 @@ import { useFirestore } from '@/firebase';
 import { collection, doc, setDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
 
 const formSchema = z.object({
-  title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
-  slug: z.string().min(2, { message: 'Slug must be at least 2 characters.' }),
-  content: z.string().min(10, { message: 'Content must be at least 10 characters.' }),
+  title: z.string().min(1, { message: 'Title is required.' }),
+  slug: z.string().optional(),
+  content: z.string().min(1, { message: 'Content cannot be empty.' }),
   category: z.string().min(1, { message: 'Please select a category.' }),
-  status: z.enum(['draft', 'published']),
+  status: z.enum(['draft', 'published', 'scheduled']),
   metaDescription: z.string().optional(),
   keywords: z.string().optional(),
   canonicalUrl: z.string().optional(),
@@ -57,31 +60,39 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
       canonicalUrl: '',
     },
   });
-  
+
+  const { isSubmitting } = form.formState;
+
   const onSubmit = async (values: ArticleFormValues) => {
     try {
+      const slug = values.slug || values.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const dataToSave = {
+        ...values,
+        slug,
+        updatedAt: serverTimestamp(),
+      };
+
       if (articleId) {
         // Update existing document
         const articleRef = doc(firestore, 'articles', articleId);
-        await setDoc(articleRef, { ...values, updatedAt: serverTimestamp() }, { merge: true });
+        await setDoc(articleRef, dataToSave, { merge: true });
         toast({ title: 'Success', description: 'Article updated successfully.' });
       } else {
         // Create new document
         const articlesCollection = collection(firestore, 'articles');
         await addDoc(articlesCollection, {
-          ...values,
+          ...dataToSave,
           publishedDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
           createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          author: 'Hustler Point Editorial', // Or get from logged in user
-          imageId: `article-${Math.floor(Math.random() * 5) + 1}`, // Placeholder
-          engagement: 0, // Initial value
-          featured: false, // Default
+          author: 'Hustler Point Editorial', 
+          imageId: `article-${Math.floor(Math.random() * 5) + 1}`,
+          engagement: 0,
+          featured: false,
         });
         toast({ title: 'Success', description: 'Article created successfully.' });
       }
       router.push('/admin/articles');
-      router.refresh(); // Re-fetch server-side props
+      router.refresh();
     } catch (error) {
       console.error('Error saving article:', error);
       toast({ title: 'Error', description: 'Could not save article.', variant: 'destructive' });
@@ -91,136 +102,143 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter article title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g., my-awesome-article" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Content</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Write your article here..." {...field} rows={15} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        {/* Header Bar */}
+        <div className="flex items-center justify-end gap-4 py-4 border-b">
+           <Button type="submit" variant="ghost" disabled={isSubmitting}>
+             {articleId ? 'Save Changes' : 'Save Draft'}
+           </Button>
+           <Popover>
+            <PopoverTrigger asChild>
+                <Button type="button" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Publishing...
+                        </>
+                    ) : (
+                        'Publish'
+                    )}
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+                <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Publishing Options</h4>
+                        <p className="text-sm text-muted-foreground">
+                        Set category, status, and SEO settings before publishing.
+                        </p>
+                    </div>
+                     <FormField
+                        control={form.control}
+                        name="category"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Category</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="Tech">Tech</SelectItem>
+                                    <SelectItem value="Creators">Creators</SelectItem>
+                                    <SelectItem value="Startups">Startups</SelectItem>
+                                    <SelectItem value="Tech Culture">Tech Culture</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="draft">Draft</SelectItem>
+                                    <SelectItem value="published">Published</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    <Button 
+                        type="button" 
+                        onClick={() => {
+                            form.setValue('status', 'published');
+                            form.handleSubmit(onSubmit)();
+                        }}
+                        disabled={isSubmitting}
+                    >
+                       Confirm & Publish
+                    </Button>
+                </div>
+            </PopoverContent>
+           </Popover>
+        </div>
+        
+        <div className="mx-auto max-w-3xl space-y-8">
+            {/* Cover Image Upload */}
+            <div className="flex items-center justify-center w-full">
+                <div className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <ImageIcon className="w-10 h-10 mb-4 text-muted-foreground" />
+                        <p className="mb-2 text-sm text-muted-foreground">Add a cover image to your article.</p>
+                        <Button type="button" variant="outline" size="sm">
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload from computer
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Article Title */}
             <FormField
             control={form.control}
-            name="category"
+            name="title"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                        <SelectItem value="Tech">Tech</SelectItem>
-                        <SelectItem value="Creators">Creators</SelectItem>
-                        <SelectItem value="Startups">Startups</SelectItem>
-                        <SelectItem value="Tech Culture">Tech Culture</SelectItem>
-                    </SelectContent>
-                </Select>
+                <FormControl>
+                    <Textarea
+                    placeholder="Article Title"
+                    className="resize-none border-none text-4xl font-extrabold tracking-tight focus-visible:ring-0 p-0 shadow-none"
+                    {...field}
+                    />
+                </FormControl>
                 <FormMessage />
                 </FormItem>
             )}
             />
+
+            {/* Article Content */}
             <FormField
             control={form.control}
-            name="status"
+            name="content"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                        <SelectItem value="draft">Draft</SelectItem>
-                        <SelectItem value="published">Published</SelectItem>
-                    </SelectContent>
-                </Select>
+                <FormControl>
+                    <Textarea
+                    placeholder="Write here. You can also include @mentions..."
+                    className="min-h-[400px] resize-none border-none p-0 text-lg focus-visible:ring-0 shadow-none"
+                    {...field}
+                    />
+                </FormControl>
                 <FormMessage />
                 </FormItem>
             )}
             />
         </div>
-        
-        <h3 className="text-lg font-medium border-t pt-6">SEO Options</h3>
-        <FormField
-          control={form.control}
-          name="metaDescription"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Meta Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter meta description (for search engines)" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         <FormField
-          control={form.control}
-          name="keywords"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Keywords</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g., tech, startups, creators" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         <FormField
-          control={form.control}
-          name="canonicalUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Canonical URL</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter canonical URL if content is syndicated" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <Button type="submit">
-            {articleId ? 'Update Article' : 'Create Article'}
-        </Button>
       </form>
     </Form>
   );

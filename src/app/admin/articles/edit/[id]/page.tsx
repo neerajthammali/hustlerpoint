@@ -6,7 +6,7 @@ import { useFirestore, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { ArticleForm } from '@/components/admin/article-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function EditArticlePage() {
   const { id } = useParams();
@@ -17,7 +17,19 @@ export default function EditArticlePage() {
   const { data: article, isLoading } = useDoc(articleRef);
 
   if (isLoading) {
-    return <p>Loading article...</p>;
+    return (
+        <div className="space-y-8">
+            <div className="flex items-center justify-end gap-4">
+                <Skeleton className="h-10 w-24" />
+                <Skeleton className="h-10 w-24" />
+            </div>
+            <div className="mx-auto max-w-3xl space-y-8">
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-12 w-1/2" />
+                <Skeleton className="h-64 w-full" />
+            </div>
+      </div>
+    );
   }
 
   if (!article && !isLoading) {
@@ -25,13 +37,8 @@ export default function EditArticlePage() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Edit Article</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div>
         {article && <ArticleForm articleId={id as string} initialData={article} />}
-      </CardContent>
-    </Card>
+    </div>
   );
 }
