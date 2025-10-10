@@ -1,4 +1,6 @@
 
+import { OutputData } from '@editorjs/editorjs';
+
 export type Stat = {
   label: string;
   value: number;
@@ -14,7 +16,7 @@ export type Article = {
   imageId: string;
   author: string;
   publishedDate: string;
-  content: string;
+  content: OutputData;
   featured: boolean;
   engagement: number;
   status: 'draft' | 'published' | 'scheduled';

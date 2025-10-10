@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,13 +13,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useFirestore } from '@/firebase';
 import { collection, doc, setDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { 
-    Upload, 
     Image as ImageIcon, 
     Loader2,
     Undo,
@@ -32,17 +30,18 @@ import {
     List,
     ListOrdered,
     MessageSquare,
-    ChevronDown,
     CheckCircle2
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import Editor from '@/components/editor';
+import { OutputData } from '@editorjs/editorjs';
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Title is required.' }),
   subtitle: z.string().optional(),
-  content: z.string().min(1, { message: 'Content cannot be empty.' }),
+  content: z.any().refine(data => data && data.blocks && data.blocks.length > 0, { message: 'Content cannot be empty.' }),
   category: z.string().optional(),
   status: z.enum(['draft', 'published', 'scheduled']),
   tags: z.array(z.string()).optional(),
@@ -83,7 +82,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
     defaultValues: initialData || {
       title: '',
       subtitle: '',
-      content: '',
+      content: { blocks: [] },
       category: '',
       status: 'draft',
       tags: [],
@@ -130,7 +129,6 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
   return (
     <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="h-screen w-full flex flex-col">
-            {/* Header */}
             <header className="flex-shrink-0 flex items-center justify-between p-4 border-b">
                 <div className="flex items-center gap-2 text-sm">
                     <Badge variant={form.getValues('status') === 'published' ? 'default' : 'secondary'}>
@@ -158,7 +156,6 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
                 </div>
             </header>
 
-            {/* Editor Body */}
             <main className="flex-1 overflow-y-auto">
                 <div className="max-w-3xl mx-auto py-12 px-4">
                     <div className="flex items-center gap-4 mb-8">
@@ -200,31 +197,22 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
                             )}
                         />
 
-                         <div className="flex items-center gap-2 pt-4">
-                             {/* Placeholder for tags/categories */}
-                         </div>
-
-                        <FormField
-                            control={form.control}
-                            name="content"
-                            render={({ field }) => (
-                                <FormItem className="pt-8">
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Start writing..."
-                                            className="min-h-[400px] resize-none border-none p-0 text-lg focus-visible:ring-0 shadow-none"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+                        <Controller
+                          control={form.control}
+                          name="content"
+                          render={({ field: { onChange, value } }) => (
+                            <FormItem className="pt-8">
+                              <FormControl>
+                                <Editor data={value} onChange={onChange} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                     </div>
                 </div>
             </main>
 
-            {/* Footer Actions */}
             <footer className="flex-shrink-0 flex items-center justify-end p-4 border-t gap-4">
                 <Button type="button" variant="outline" onClick={() => router.push('/admin/articles')}>Cancel</Button>
                 <Button type="button" variant="ghost" disabled={isSubmitting} onClick={() => {

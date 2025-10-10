@@ -17,6 +17,7 @@ import { useCollection } from '@/firebase/firestore/use-collection';
 import { useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
 import { type Article } from '@/lib/types';
+import ArticleRenderer from '@/components/article-renderer';
 
 
 type ArticlePageProps = {
@@ -88,7 +89,6 @@ export default function ArticlePage({ params }: ArticlePageProps) {
   }
 
   const image = PlaceHolderImages.find((img) => img.id === article.imageId);
-  const contentAsArray = typeof article.content === 'string' ? article.content.split('\n') : [];
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
@@ -128,11 +128,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         <div className="prose prose-lg dark:prose-invert max-w-none">
           {article.excerpt && <p className="lead text-xl text-muted-foreground">{article.excerpt}</p>}
           <Separator className="my-8" />
-          <div className="space-y-6 text-lg leading-relaxed text-foreground/90">
-              {contentAsArray.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-              ))}
-          </div>
+          <ArticleRenderer data={article.content} />
         </div>
       </article>
 

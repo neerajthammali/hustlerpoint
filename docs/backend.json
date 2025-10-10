@@ -10,8 +10,8 @@
           "description": "Title of the article."
         },
         "content": {
-          "type": "string",
-          "description": "The full content of the article, likely in Markdown or HTML."
+          "type": "object",
+          "description": "The full content of the article in Editor.js format."
         },
         "author": {
           "type": "string",
