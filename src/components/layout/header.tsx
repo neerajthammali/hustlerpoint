@@ -2,14 +2,12 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Mail } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { Logo } from "@/components/logo";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -43,6 +41,9 @@ export function Header() {
                   <Logo />
                 </div>
                 {navLinks.map((link) => (
+                   link.label === 'Contact' ? (
+                    <a key={link.href} href={link.href} className="rounded-md px-4 py-2 text-lg font-medium transition-colors hover:bg-accent">{link.label}</a>
+                ) : (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -51,6 +52,7 @@ export function Header() {
                   >
                     {link.label}
                   </Link>
+                )
                 ))}
               </div>
             </SheetContent>
@@ -81,7 +83,7 @@ export function Header() {
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <ThemeToggle />
+          {/* ThemeToggle removed */}
         </div>
       </div>
     </header>

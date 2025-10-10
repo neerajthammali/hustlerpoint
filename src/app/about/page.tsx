@@ -1,9 +1,8 @@
 
 import Image from 'next/image';
-import { Mail, Linkedin, Code, DraftingCompass, BrainCircuit, BookOpen, Lightbulb, TrendingUp, CheckCircle } from 'lucide-react';
+import { Linkedin, BookOpen, Lightbulb, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 const whatYoullFind = [
