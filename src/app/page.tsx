@@ -81,6 +81,13 @@ export default function Home() {
             ))
           )}
         </div>
+        <div className="mt-12">
+          <Button asChild size="lg" variant="outline">
+            <Link href="/articles">
+              View More Articles
+            </Link>
+          </Button>
+        </div>
       </section>
 
       <section className="mt-24 text-center">
