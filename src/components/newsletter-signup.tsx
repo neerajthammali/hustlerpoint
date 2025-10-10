@@ -7,12 +7,12 @@ import { subscribeToNewsletter, type NewsletterSubscribeState } from "@/app/acti
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/80 dark:bg-card dark:text-card-foreground dark:hover:bg-card/80">
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -20,7 +20,7 @@ function SubmitButton() {
         </>
       ) : (
         <>
-          Subscribe <ArrowRight className="ml-2 h-4 w-4" />
+          Subscribe <Send className="ml-2 h-4 w-4" />
         </>
       )}
     </Button>
@@ -55,7 +55,7 @@ export default function NewsletterSignup() {
           name="email"
           placeholder="Enter your email"
           required
-          className="flex-grow"
+          className="flex-grow bg-primary/80 text-primary-foreground placeholder:text-primary-foreground/70 border-primary-foreground/20 focus-visible:ring-primary-foreground"
           aria-label="Email for newsletter"
         />
         <SubmitButton />

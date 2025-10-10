@@ -1,6 +1,6 @@
 
 import Image from 'next/image';
-import { ArrowRight, BarChart, TrendingUp, Users } from 'lucide-react';
+import { ArrowRight, BarChart, TrendingUp, Users, Send } from 'lucide-react';
 
 import { getArticles, getStats } from '@/lib/data';
 import {
@@ -93,25 +93,14 @@ export default function Home() {
       </section>
 
       <section id="newsletter" className="mt-24 scroll-mt-20">
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-card">
-          <div className="grid md:grid-cols-2">
-            <div className="p-8 sm:p-10">
-              <h3 className="font-headline text-2xl font-bold tracking-tight">Join the Hustle</h3>
-              <p className="mt-2 text-muted-foreground">
-                Get the latest insights, articles, and updates delivered straight to your inbox.
-              </p>
-              <div className="mt-6">
-                <NewsletterSignup />
-              </div>
-            </div>
-            <div className="relative hidden aspect-square md:block">
-              <Image
-                src="https://picsum.photos/seed/newsletter/600/600"
-                alt="Newsletter abstract image"
-                fill
-                className="object-cover"
-                data-ai-hint="abstract texture"
-              />
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-primary text-primary-foreground">
+          <div className="p-8 text-center sm:p-10">
+            <h3 className="font-headline text-2xl font-bold tracking-tight">Join Hustler's Point</h3>
+            <p className="mt-2 text-primary-foreground/80">
+              Get exclusive insights on tech, business, and entrepreneurship, delivered straight to your inbox.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <NewsletterSignup />
             </div>
           </div>
         </div>
