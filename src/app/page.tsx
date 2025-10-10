@@ -1,13 +1,12 @@
-
 'use client';
-import { ArrowRight, Feather } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { getArticles, getEditorsPicks } from '@/lib/data';
 import ArticleCard from '@/components/article-card';
 import { ArticleCarousel } from '@/components/article-carousel';
 import { type Article } from '@/lib/types';
 import { useEffect, useState } from 'react';
+import { getAllArticles } from '@/lib/articles';
 
 export default function Home() {
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
@@ -15,16 +14,21 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching data
-    const allArticles = getArticles();
-    const picks = getEditorsPicks();
-    
-    // get featured articles that are not editor's picks
-    const featured = allArticles.filter(article => article.featured && !picks.find(p => p.id === article.id));
+    const fetchArticles = async () => {
+      setIsLoading(true);
+      const allArticles = await getAllArticles();
+      
+      const editorsPicksSlugs = ['the-art-of-the-pitch-deck', 'ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
+      const picks = allArticles.filter(article => editorsPicksSlugs.includes(article.slug));
 
-    setFeaturedArticles(featured);
-    setEditorsPicks(picks);
-    setIsLoading(false);
+      const featured = allArticles.filter(article => article.featured && !picks.find(p => p.slug === article.slug));
+
+      setFeaturedArticles(featured);
+      setEditorsPicks(picks);
+      setIsLoading(false);
+    };
+
+    fetchArticles();
   }, []);
 
   return (
@@ -58,7 +62,7 @@ export default function Home() {
             Array.from({ length: 3 }).map((_, i) => <ArticleCard key={i} article={null} isLoading={true}/>)
           ) : (
             editorsPicks.map(article => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.slug} article={article} />
             ))
           )}
         </div>

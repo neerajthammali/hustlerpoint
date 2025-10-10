@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -35,15 +34,22 @@ const suggestTrendingArticlesPrompt = ai.definePrompt({
   output: {schema: SuggestTrendingArticlesOutputSchema},
   prompt: `You are an expert blog curator who suggests trending articles for a website sidebar.
 
-  Given the following articles with their titles, excerpts, and engagement metrics, select the top {{numberOfSuggestions}} most trending articles.
+  Your task is to select the top {{numberOfSuggestions}} articles that are most likely to be interesting to a reader.
+  Consider a mix of high engagement and interesting or related topics. Do not simply pick the ones with the highest engagement score.
+  
+  Analyze the provided article titles, excerpts, and their engagement metrics.
 
   Do not suggest articles that are not in the provided list.
 
-  Article Titles: {{articleTitles}}
-  Article Excerpts: {{articleExcerpts}}
-  Engagement Metrics: {{engagementMetrics}}
+  Article Data:
+  {{#each articleTitles}}
+  - Title: {{this}}
+    Excerpt: {{lookup ../articleExcerpts @index}}
+    Engagement: {{lookup ../engagementMetrics @index}}
+  {{/each}}
 
-  Output only a JSON array of the article titles that you recommend.
+  Based on this data, recommend the top {{numberOfSuggestions}} article titles.
+  Output only a JSON object containing an array of the recommended article titles.
   `,
 });
 

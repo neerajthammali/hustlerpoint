@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
-config();
 
-import '@/ai/flows/suggest-trending-articles.ts';
+import { config } from 'dotenv';
+config()

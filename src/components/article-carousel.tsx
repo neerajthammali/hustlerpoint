@@ -59,7 +59,7 @@ export function ArticleCarousel({ articles, isLoading }: ArticleCarouselProps) {
     >
       <CarouselContent>
         {articles.map((article) => (
-          <CarouselItem key={article.id} className="md:basis-1/2 lg:basis-1/3">
+          <CarouselItem key={article.slug} className="md:basis-1/2 lg:basis-1/3">
             <div className="p-1 h-full">
               <ArticleCard article={article} />
             </div>

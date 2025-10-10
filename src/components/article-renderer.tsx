@@ -14,38 +14,44 @@ const ArticleRenderer: React.FC<ArticleRendererProps> = ({ content }) => {
   return (
     <div className="space-y-6 text-lg leading-relaxed text-foreground/90">
       {blocks.map((block, index) => {
-        if (block.startsWith('# ')) {
-          const level = block.match(/^#+ /)?.[0].trim().length || 1;
-          const HeaderTag = `h${level}` as keyof JSX.IntrinsicElements;
-          const text = block.replace(/^#+ /, '');
-          return <HeaderTag key={index}>{text}</HeaderTag>;
+        // Headers
+        if (block.startsWith('#')) {
+          const level = block.match(/^#+/)?.[0].length || 1;
+          const HeaderTag = `h${level + 1}` as keyof JSX.IntrinsicElements; // h2, h3, etc.
+          const text = block.replace(/^#+\s/, '');
+          return <HeaderTag key={index} className="font-headline font-bold">{text}</HeaderTag>;
         }
         
-        if (block.startsWith('1. ')) {
+        // Unordered List
+        if (block.startsWith('* ') || block.startsWith('- ')) {
             return (
-                <ol key={index} className="list-inside list-decimal space-y-2">
+                <ul key={index} className="list-inside list-disc space-y-2 pl-4">
+                    {block.split('\n').map((item, i) => (
+                        <li key={i}>{item.replace(/^[-*]\s/, '')}</li>
+                    ))}
+                </ul>
+            )
+        }
+        
+        // Ordered List
+        if (/^\d+\.\s/.test(block)) {
+            return (
+                <ol key={index} className="list-inside list-decimal space-y-2 pl-4">
                     {block.split('\n').map((item, i) => (
                         <li key={i}>{item.replace(/^\d+\.\s/, '')}</li>
                     ))}
                 </ol>
             )
         }
-
-        if (block.startsWith('- ')) {
+        
+        // Blockquote
+        if (block.startsWith('> ')) {
             return (
-                <ul key={index} className="list-inside list-disc space-y-2">
-                    {block.split('\n').map((item, i) => (
-                        <li key={i}>{item.replace(/^- /, '')}</li>
-                    ))}
-                </ul>
+                <blockquote key={index} className="border-l-4 border-primary pl-4 italic text-muted-foreground">
+                    {block.replace(/^> /, '')}
+                </blockquote>
             )
         }
-        
-        return <p key={index}>{block}</p>;
-      })}
-    </div>
-  );
-};
 
-export default ArticleRenderer;
-
+        // Paragraph
+        return

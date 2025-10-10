@@ -9,6 +9,7 @@ import { getArticleBySlug, getAllArticles } from '@/lib/articles';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
+import Comments from '@/components/comments';
 
 type ArticlePageProps = {
   params: {
@@ -53,7 +54,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  <span>{article.publishedDate}</span>
+                  <span>{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 </div>
               </div>
             </header>
@@ -77,19 +78,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <ArticleRenderer content={article.content} />
             </div>
           </article>
+          <Separator className="my-12" />
+          <Comments />
         </div>
 
         {/* Sidebar */}
         <aside className="lg:col-span-4 lg:pt-24">
           <div className="sticky top-28 space-y-8">
-            <TrendingArticles currentArticleId={article.id} />
+            <TrendingArticles currentArticleSlug={article.slug} />
              <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-6">
                 <p className="text-sm font-semibold">Share this article</p>
-                <ShareButtons article={{title: article.title, slug: article.slug}} />
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-  );
-}
+                <ShareButtons article={{

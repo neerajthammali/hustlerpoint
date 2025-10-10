@@ -57,8 +57,4 @@ export default function ShareButtons({ article }: ShareButtonsProps) {
         </a>
       </Button>
       <Button variant="outline" size="icon" onClick={copyToClipboard} aria-label="Copy link">
-        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-      </Button>
-    </div>
-  );
-}
+        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-

@@ -6,7 +6,6 @@ export type Stat = {
 };
 
 export interface Article {
-  id: string;
   slug: string;
   title: string;
   excerpt: string;
@@ -14,8 +13,3 @@ export interface Article {
   imageId?: string;
   author: string;
   publishedDate: string;
-  content: string;
-  featured: boolean;
-  engagement: number;
-  status: 'published' | 'draft';
-}

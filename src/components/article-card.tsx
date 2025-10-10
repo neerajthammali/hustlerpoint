@@ -60,7 +60,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
           <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{article.excerpt}</p>
         </div>
         <div className="mt-4 pt-4 text-xs text-muted-foreground">
-          {article.publishedDate}
+          {new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
       </CardContent>
     </Card>
