@@ -17,6 +17,23 @@ import NewsletterSignup from '@/components/newsletter-signup';
 import { ArticleCarousel } from '@/components/article-carousel';
 import Link from 'next/link';
 
+function StatBlock({ stat, icon }: { stat: ReturnType<typeof getStats>[0], icon: React.ReactNode }) {
+    return (
+        <div className="flex items-center space-x-4 mx-8">
+            <div className="flex-shrink-0">{icon}</div>
+            <div>
+                <div className="text-2xl font-bold">
+                    <AnimatedCounter to={stat.value} />
+                </div>
+                <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
+                 <p className="text-xs text-green-500">
+                    +{stat.growth}% from last year
+                </p>
+            </div>
+        </div>
+    );
+}
+
 export default function Home() {
   const stats = getStats();
   const featuredArticles = getArticles().filter((article) => article.featured);
@@ -26,6 +43,8 @@ export default function Home() {
     <TrendingUp key="trending-up" className="h-8 w-8 text-primary" />,
     <BarChart key="bar-chart" className="h-8 w-8 text-primary" />,
   ];
+
+  const marqueeStats = [...stats, ...stats];
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
@@ -41,23 +60,19 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((stat, index) => (
-          <Card key={stat.label} className="flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
-              {statIcons[index]}
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">
-                <AnimatedCounter to={stat.value} />
+      <div className="relative mt-16 w-full overflow-hidden group">
+          <div className="flex whitespace-nowrap group-hover:[animation-play-state:paused]">
+              <div className="marquee flex min-w-full flex-shrink-0 items-center justify-around">
+                  {marqueeStats.map((stat, index) => (
+                      <StatBlock key={`${stat.label}-${index}`} stat={stat} icon={statIcons[index % statIcons.length]} />
+                  ))}
               </div>
-              <p className="text-xs text-muted-foreground">
-                +{stat.growth}% from last year
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+              <div aria-hidden="true" className="marquee2 flex min-w-full flex-shrink-0 items-center justify-around">
+                  {marqueeStats.map((stat, index) => (
+                      <StatBlock key={`${stat.label}-2-${index}`} stat={stat} icon={statIcons[index % statIcons.length]} />
+                  ))}
+              </div>
+          </div>
       </div>
 
       <section className="mt-24 text-center">
