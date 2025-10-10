@@ -62,7 +62,7 @@ export default function Home() {
           Where Insight Meets Impact
         </Badge>
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          Hustler's Point!!
+          Hustler's Point
         </h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl">
           Your source for sharp, actionable insights into tech, creativity, and startup culture. We provide practical guides to help you navigate the digital world, build your brand, and turn your ideas into reality.
