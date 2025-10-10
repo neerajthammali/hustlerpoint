@@ -12,6 +12,7 @@ import { useCollection } from '@/firebase/firestore/use-collection';
 import { useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, where, query } from 'firebase/firestore';
 import { type Article } from '@/lib/types';
+import { Card } from '@/components/ui/card';
 
 
 function TrendingArticlesSkeleton() {
