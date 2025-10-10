@@ -1,14 +1,53 @@
 
+'use client';
+
 import { getArticles } from '@/lib/data';
 import { suggestTrendingArticles } from '@/ai/flows/suggest-trending-articles';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection, query, where, orderBy, limit } from 'firebase/firestore';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { type Article } from '@/lib/types';
+import { Skeleton } from './ui/skeleton';
 
-export async function TrendingArticles() {
-  const allArticles = getArticles();
+export function TrendingArticles({ currentArticleId }: { currentArticleId?: string }) {
+  const firestore = useFirestore();
   
-  if (allArticles.length === 0) {
+  const articlesQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    let q = query(
+        collection(firestore, 'articles'), 
+        where('status', '==', 'published'),
+        orderBy('engagement', 'desc'), 
+        limit(4)
+    );
+    return q;
+  }, [firestore]);
+
+  const { data: allArticles, isLoading } = useCollection<Article>(articlesQuery);
+
+  if (isLoading) {
+      return (
+          <div>
+              <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
+              <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                      <div key={i} className="flex items-center space-x-4">
+                          <Skeleton className="h-16 w-16 rounded-lg" />
+                          <div className="space-y-2">
+                              <Skeleton className="h-4 w-40" />
+                              <Skeleton className="h-4 w-24" />
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      );
+  }
+  
+  if (!allArticles || allArticles.length === 0) {
     return (
         <div>
             <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
@@ -17,15 +56,9 @@ export async function TrendingArticles() {
     );
   }
 
-  const { suggestedArticles: trendingArticleTitles } = await suggestTrendingArticles({
-    articleTitles: allArticles.map(a => a.title),
-    articleExcerpts: allArticles.map(a => a.excerpt),
-    engagementMetrics: allArticles.map(a => a.engagement),
-    numberOfSuggestions: 3,
-  });
-
+  // Filter out the current article from the trending list and take the top 3
   const trendingArticles = allArticles
-    .filter(a => trendingArticleTitles.includes(a.title))
+    .filter(a => a.id !== currentArticleId)
     .slice(0, 3);
 
   return (

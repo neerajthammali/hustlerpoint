@@ -1,13 +1,18 @@
 
+'use client';
+
 import { Suspense } from 'react';
-import { getArticles, getEditorsPicks } from '@/lib/data';
 import ArticleCard from '@/components/article-card';
 import { TrendingArticles } from '@/components/trending-articles';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, where, query } from 'firebase/firestore';
+import { type Article } from '@/lib/types';
+
 
 function TrendingArticlesSkeleton() {
   return (
@@ -29,13 +34,20 @@ function TrendingArticlesSkeleton() {
 }
 
 function EditorsPicks() {
-  const editorsPicks = getEditorsPicks();
+  const firestore = useFirestore();
+  const articlesQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'articles'), where('featured', '==', true));
+  }, [firestore]);
+  const { data: editorsPicks, isLoading } = useCollection<Article>(articlesQuery);
+
 
   return (
     <div>
       <h3 className="mb-4 font-headline text-xl font-bold">Editor's Pick</h3>
       <div className="space-y-4">
-        {editorsPicks.map((article) => {
+        {isLoading && <TrendingArticlesSkeleton />}
+        {editorsPicks && editorsPicks.map((article) => {
           const image = PlaceHolderImages.find((img) => img.id === article.imageId);
           return (
             <Link key={article.id} href={`/articles/${article.slug}`} className="group flex items-start space-x-4">
@@ -46,7 +58,7 @@ function EditorsPicks() {
                     alt={article.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    data-ai-hint={image.imageHint}
+                    data-ai-hint={image.imageHint || ''}
                   />
                 )}
               </div>
@@ -64,7 +76,13 @@ function EditorsPicks() {
 
 
 export default function ArticlesPage() {
-  const articles = getArticles();
+  const firestore = useFirestore();
+  const articlesCollection = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'articles'), where('status', '==', 'published'));
+  }, [firestore]);
+  const { data: articles, isLoading } = useCollection<Article>(articlesCollection);
+
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -77,7 +95,24 @@ export default function ArticlesPage() {
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="grid gap-8 lg:col-span-8">
-          {articles.map((article) => (
+          {isLoading && Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i} className="flex flex-col overflow-hidden md:flex-row">
+              <div className="relative aspect-video flex-shrink-0 md:w-2/5">
+                <Skeleton className="h-full w-full" />
+              </div>
+              <div className="flex flex-1 flex-col justify-between p-6">
+                <div>
+                  <Skeleton className="h-4 w-20 mb-2" />
+                  <Skeleton className="h-6 w-full mb-2" />
+                  <Skeleton className="h-4 w-4/5" />
+                </div>
+                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </div>
+            </Card>
+          ))}
+          {articles && articles.map((article) => (
             <ArticleCard key={article.id} article={article} layout="horizontal" />
           ))}
         </div>

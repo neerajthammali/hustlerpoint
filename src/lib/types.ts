@@ -1,3 +1,4 @@
+
 export type Stat = {
   label: string;
   value: number;
@@ -13,8 +14,11 @@ export type Article = {
   imageId: string;
   author: string;
   publishedDate: string;
-  readingTime: number;
-  content: string[];
+  content: string;
   featured: boolean;
   engagement: number;
+  status: 'draft' | 'published' | 'scheduled';
+  metaDescription?: string;
+  keywords?: string;
+  canonicalUrl?: string;
 };

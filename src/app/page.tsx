@@ -1,15 +1,9 @@
 
-import Image from 'next/image';
-import { ArrowRight, BarChart, TrendingUp, Users, Send } from 'lucide-react';
+'use client';
 
-import { getArticles, getStats } from '@/lib/data';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { ArrowRight, BarChart, TrendingUp, Users } from 'lucide-react';
+
+import { getStats } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -17,6 +11,11 @@ import AnimatedCounter from '@/components/animated-counter';
 import NewsletterSignup from '@/components/newsletter-signup';
 import { ArticleCarousel } from '@/components/article-carousel';
 import Link from 'next/link';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection, query, where } from 'firebase/firestore';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { type Article } from '@/lib/types';
+
 
 function StatBlock({ stat, icon }: { stat: ReturnType<typeof getStats>[0], icon: React.ReactNode }) {
     return (
@@ -37,7 +36,18 @@ function StatBlock({ stat, icon }: { stat: ReturnType<typeof getStats>[0], icon:
 
 export default function Home() {
   const stats = getStats();
-  const featuredArticles = getArticles().filter((article) => article.featured);
+  const firestore = useFirestore();
+
+  const featuredArticlesQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(
+      collection(firestore, 'articles'),
+      where('featured', '==', true),
+      where('status', '==', 'published')
+    );
+  }, [firestore]);
+  
+  const { data: featuredArticles, isLoading: areArticlesLoading } = useCollection<Article>(featuredArticlesQuery);
 
   const statIcons = [
     <Users key="users" className="h-8 w-8 text-primary" />,
@@ -83,7 +93,7 @@ export default function Home() {
           Dive into our latest insights and stories from the world of tech, creators, and startup culture.
         </p>
         <div className="mt-8">
-          <ArticleCarousel articles={featuredArticles} />
+          <ArticleCarousel articles={featuredArticles || []} isLoading={areArticlesLoading} />
         </div>
         <Button asChild variant="outline" className="mt-8">
           <Link href="/articles">
