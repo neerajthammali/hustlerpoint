@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { getArticleBySlug, getArticles } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
-import { Clock, UserCircle, Calendar } from 'lucide-react';
+import { UserCircle, Calendar } from 'lucide-react';
 import ShareButtons from '@/components/share-buttons';
 import { Separator } from '@/components/ui/separator';
+import Comments from '@/components/comments';
 
 type ArticlePageProps = {
   params: {
@@ -48,10 +49,6 @@ export default function ArticlePage({ params }: ArticlePageProps) {
             <Calendar className="h-4 w-4" />
             <span>{article.publishedDate}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <span>{article.readingTime} min read</span>
-          </div>
         </div>
       </header>
 
@@ -78,11 +75,13 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         </div>
       </div>
       
-      <footer className="mt-12">
+      <footer className="mt-12 space-y-8">
         <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-6 sm:flex-row">
             <p className="text-sm font-semibold">Share this article</p>
             <ShareButtons article={{title: article.title, slug: article.slug}} />
         </div>
+
+        <Comments />
       </footer>
     </article>
   );

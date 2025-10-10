@@ -46,7 +46,7 @@ export default function ArticleCard({ article, layout = 'vertical' }: ArticleCar
           </div>
           <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span>
-              {article.publishedDate} &bull; {article.readingTime} min read
+              {article.publishedDate}
             </span>
             <Link href={`/articles/${article.slug}`} className="flex items-center text-primary opacity-0 transition-opacity group-hover:opacity-100">
               Read More <ArrowRight className="ml-1 h-4 w-4" />
@@ -85,7 +85,7 @@ export default function ArticleCard({ article, layout = 'vertical' }: ArticleCar
           <p className="mt-2 text-sm text-muted-foreground">{article.excerpt}</p>
         </div>
         <div className="mt-4 pt-4 text-xs text-muted-foreground">
-          {article.publishedDate} &bull; {article.readingTime} min read
+          {article.publishedDate}
         </div>
       </CardContent>
     </Card>
