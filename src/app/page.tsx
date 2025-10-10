@@ -47,7 +47,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
-      <div className="flex flex-col items-center justify-center space-y-8 text-center">
+      <div className="flex flex-col items-center justify-center space-y-6 text-center">
         <Badge variant="outline" className="py-2 px-4 text-sm">
           Where Insight Meets Impact
         </Badge>
@@ -55,8 +55,18 @@ export default function Home() {
           Hustler Point
         </h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl">
-          A digital voice built for the modern hustler — where ideas, innovation, and individuality meet.
+          Your source for sharp, actionable insights into tech, creativity, and startup culture. We provide practical guides to help you navigate the digital world, build your brand, and turn your ideas into reality.
         </p>
+        <div className="flex flex-col gap-4 sm:flex-row">
+            <Button asChild size="lg">
+                <Link href="/articles">
+                    Read Articles <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+                <Link href="#newsletter">Join Newsletter</Link>
+            </Button>
+        </div>
       </div>
 
       <div className="relative mt-16 w-full">
@@ -82,7 +92,7 @@ export default function Home() {
         </Button>
       </section>
 
-      <section className="mt-24">
+      <section id="newsletter" className="mt-24 scroll-mt-20">
         <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-card">
           <div className="grid md:grid-cols-2">
             <div className="p-8 sm:p-10">
