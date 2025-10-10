@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { ArticleForm } from '@/components/admin/article-form';
@@ -13,7 +13,7 @@ export default function EditArticlePage() {
   const firestore = useFirestore();
   const router = useRouter();
   
-  const articleRef = doc(firestore, 'articles', id as string);
+  const articleRef = useMemoFirebase(() => doc(firestore, 'articles', id as string), [firestore, id]);
   const { data: article, isLoading } = useDoc(articleRef);
 
   if (isLoading) {

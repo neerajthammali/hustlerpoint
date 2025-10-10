@@ -3,11 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, deleteDoc, doc } from 'firebase/firestore';
 import Link from 'next/link';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
-import { useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 // Define the Article type based on your data structure
@@ -21,7 +20,7 @@ interface Article {
 
 export default function AdminArticlesPage() {
   const firestore = useFirestore();
-  const articlesCollection = useMemo(() => collection(firestore, 'articles'), [firestore]);
+  const articlesCollection = useMemoFirebase(() => collection(firestore, 'articles'), [firestore]);
   const { data: articles, isLoading } = useCollection<Article>(articlesCollection);
 
   const handleDelete = async (id: string) => {
