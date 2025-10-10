@@ -4,7 +4,7 @@ excerpt: 'Explore the evolving landscape of work and how companies are adapting 
 category: 'Tech Culture'
 author: 'Hustler Point Editorial'
 publishedDate: 'July 15, 2024'
-featured: true
+featured: false
 imageUrl: 'https://picsum.photos/seed/1/1200/800'
 imageHint: 'future work'
 ---
