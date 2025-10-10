@@ -1,0 +1,152 @@
+/**
+ * @fileoverview Firestore Security Rules for Hustler Point blog.
+ *
+ * Core Philosophy:
+ * This ruleset employs a role-based access control model, primarily using the presence
+ * of a document in the `/admins` collection to grant administrative privileges.
+ * Data is generally accessible for reading, but modifications are restricted to
+ * authenticated users or those with admin roles.
+ *
+ * Data Structure:
+ * - /articles/{articleId}: Stores blog articles.
+ * - /categories/{categoryId}: Stores article categories.
+ * - /newsletter_subscribers/{subscriberId}: Stores newsletter subscribers.
+ * - /analytics/{analyticId}: Stores website analytics data.
+ * - /editor_picks/{editorPickId}: Stores featured/editor's pick articles.
+ * - /admins/{adminId}: Stores administrator users.
+ *
+ * Key Security Decisions:
+ * - Read access to all collections is generally public.
+ * - Write access to most collections is restricted to authenticated users.
+ * - Administrative privileges are granted based on the presence of a user's document in the `/admins` collection.
+ * - No user-owned subcollections are used, simplifying the security model.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Grants read access to all articles and restricts write access to authenticated users.
+     * @path /articles/{articleId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows any user to read articles, but requires authentication to create, update, or delete.
+     */
+    match /articles/{articleId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    /**
+     * @description Grants read access to all categories and restricts write access to authenticated users.
+     * @path /categories/{categoryId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows any user to read categories, but requires authentication to create, update, or delete.
+     */
+    match /categories/{categoryId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    /**
+     * @description Grants read access to all newsletter subscribers and restricts write access to authenticated users.
+     * @path /newsletter_subscribers/{subscriberId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows any user to read newsletter subscribers, but requires authentication to create, update, or delete.
+     */
+    match /newsletter_subscribers/{subscriberId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    /**
+     * @description Grants read access to all analytics data and restricts write access to authenticated users.
+     * @path /analytics/{analyticId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows any user to read analytics, but requires authentication to create, update, or delete.
+     */
+    match /analytics/{analyticId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    /**
+     * @description Grants read access to all editor's picks and restricts write access to authenticated users.
+     * @path /editor_picks/{editorPickId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows any user to read editor's picks, but requires authentication to create, update, or delete.
+     */
+    match /editor_picks/{editorPickId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    /**
+     * @description Grants read and write access to admins only to the admins collection
+     * @path /admins/{adminId}
+     * @allow get, list: if isAdmin();
+     * @allow create: if isAdmin();
+     * @allow update: if isAdmin();
+     * @allow delete: if isAdmin();
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Restricts access to admins collection to only admins.
+     */
+    match /admins/{adminId} {
+      allow get, list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Helper function to determine if a user is signed in.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to determine if a user is an admin.
+    function isAdmin() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.id == request.auth.uid;
+    }
+  }
+}
