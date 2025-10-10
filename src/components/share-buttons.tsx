@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Copy, Linkedin, Twitter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -24,9 +24,11 @@ export default function ShareButtons({ article }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [origin, setOrigin] = useState("");
 
-  useState(() => {
-    setOrigin(window.location.origin);
-  });
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+    }
+  }, []);
   
   const articleUrl = `${origin}/articles/${article.slug}`;
 
