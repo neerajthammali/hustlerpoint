@@ -6,7 +6,6 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { type Article } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
 import { getAllArticles } from '@/lib/articles';
-import { suggestTrendingArticles } from '@/ai/flows/suggest-trending-articles';
 
 export function TrendingArticles({ currentArticleSlug }: { currentArticleSlug?: string }) {
   const [trendingArticles, setTrendingArticles] = useState<Article[]>([]);
@@ -15,38 +14,14 @@ export function TrendingArticles({ currentArticleSlug }: { currentArticleSlug?: 
   useEffect(() => {
     const fetchTrendingArticles = async () => {
       setIsLoading(true);
+      
       const allArticles = (await getAllArticles()).filter(a => a.slug !== currentArticleSlug);
 
-      try {
-        const result = await suggestTrendingArticles({
-          articleTitles: allArticles.map(a => a.title),
-          articleExcerpts: allArticles.map(a => a.excerpt),
-          engagementMetrics: allArticles.map(a => a.engagement),
-          numberOfSuggestions: 3,
-        });
-
-        const suggestedTitles = new Set(result.suggestedArticles);
-        const suggested = allArticles.filter(a => suggestedTitles.has(a.title));
-        
-        // Fallback to simple sorting if AI returns fewer than 3 articles
-        if (suggested.length < 3) {
-          const fallback = allArticles
-            .sort((a, b) => b.engagement - a.engagement)
-            .slice(0, 3);
-          setTrendingArticles(fallback);
-        } else {
-          setTrendingArticles(suggested);
-        }
-
-      } catch (error) {
-        console.error("AI suggestion failed, falling back to simple sort:", error);
-        // Fallback to simple sorting on API error
-        const sortedArticles = allArticles
-          .sort((a, b) => b.engagement - a.engagement)
-          .slice(0, 3);
-        setTrendingArticles(sortedArticles);
-      }
-
+      const sortedArticles = allArticles
+        .sort((a, b) => b.engagement - a.engagement)
+        .slice(0, 3);
+      
+      setTrendingArticles(sortedArticles);
       setIsLoading(false);
     };
 
