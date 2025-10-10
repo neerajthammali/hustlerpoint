@@ -37,14 +37,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-card">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-4 md:text-left">
-            
-            <div className="flex flex-col items-center md:items-start">
-                <Logo />
-                <p className="mt-4 text-sm text-muted-foreground">
-                    Actionable insights for creators, developers, and founders.
-                </p>
-            </div>
+        <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3 md:text-left">
             
             <div>
               <h3 className="font-headline text-lg font-bold">Navigation</h3>
