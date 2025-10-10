@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 
@@ -5,6 +6,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
   { href: "/about", label: "About" },
+  { href: "mailto:neerajthammali@gmail.com", label: "Contact" },
 ];
 
 export function Footer() {
@@ -14,9 +16,13 @@ export function Footer() {
         <Logo />
         <nav className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="transition-colors hover:text-foreground">
-              {link.label}
-            </Link>
+            link.label === 'Contact' ? (
+                <a key={link.href} href={link.href} className="transition-colors hover:text-foreground">{link.label}</a>
+            ) : (
+                <Link key={link.href} href={link.href} className="transition-colors hover:text-foreground">
+                {link.label}
+                </Link>
+            )
           ))}
         </nav>
         <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Hustler Point. All rights reserved.</p>

@@ -1,7 +1,8 @@
+
 "use client";
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Mail } from "lucide-react";
 
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -13,6 +14,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
   { href: "/about", label: "About" },
+  { href: "mailto:neerajthammali@gmail.com", label: "Contact" },
 ];
 
 export function Header() {
@@ -63,13 +65,17 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              {link.label}
-            </Link>
+             link.label === 'Contact' ? (
+                <a key={link.href} href={link.href} className="transition-colors hover:text-foreground/80 text-foreground/60">{link.label}</a>
+             ) : (
+                <Link
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                {link.label}
+                </Link>
+             )
           ))}
         </nav>
 

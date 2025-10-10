@@ -1,107 +1,105 @@
-import Image from 'next/image';
-import { BarChart, Users, Eye } from 'lucide-react';
-import NewsletterSignup from '@/components/newsletter-signup';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import AnimatedCounter from '@/components/animated-counter';
 
-const analyticsData = [
-  {
-    icon: <Users className="h-6 w-6 text-primary" />,
-    value: 6273,
-    label: 'Total Demographics',
-    description: 'A growing community of innovators and creators.',
-  },
-  {
-    icon: <BarChart className="h-6 w-6 text-primary" />,
-    value: 17,
-    label: 'Total Engagements',
-    description: 'Meaningful interactions across our content.',
-  },
-  {
-    icon: <Eye className="h-6 w-6 text-primary" />,
-    value: 546,
-    label: 'Article Views',
-    description: 'Insights reaching a dedicated readership.',
-  },
-];
+import Image from 'next/image';
+import { Mail, Linkedin } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="mx-auto max-w-4xl">
-        <header className="text-center">
-          <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
-            About Hustler Point
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            The digital voice built for the modern hustler — where ideas, innovation, and individuality meet.
-          </p>
-        </header>
+    <div className="container mx-auto max-w-3xl px-4 py-16">
+      <header className="mb-12 text-center">
+        <div className="mb-4 inline-block">
+          <Image
+            src="https://picsum.photos/seed/profile/128/128"
+            alt="Neeraj Thammali"
+            width={128}
+            height={128}
+            className="rounded-full"
+            data-ai-hint="founder portrait"
+          />
+        </div>
+        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
+          Hi. I'm Neeraj Thammali 🤘
+        </h1>
+        <Link
+          href="https://twitter.com/neerajthammali"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-block text-lg text-primary hover:underline"
+        >
+          @neerajthammali
+        </Link>
+      </header>
 
-        <section className="mt-16">
-          <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-lg">
-            <Image
-              src="https://picsum.photos/seed/community/1200/675"
-              alt="Hustler Point Community"
-              fill
-              className="object-cover"
-              data-ai-hint="diverse community"
-            />
-          </div>
-        </section>
-
-        <section className="mt-16 grid gap-8 md:grid-cols-2">
-          <div>
-            <h2 className="font-headline text-3xl font-bold">Our Vision</h2>
-            <p className="mt-4 text-muted-foreground">
-              At Hustler Point, we believe in the power of bold ideas and the relentless individuals who bring them to life. We are more than just a media brand; we are a platform for the voices redefining the digital world. Our mission is to provide sharp, actionable insights into tech, creativity, and startup culture that not only inform but also inspire action.
+      <div className="space-y-12">
+        <section>
+          <h2 className="font-headline text-3xl font-bold">Short Bio</h2>
+          <div className="prose prose-lg dark:prose-invert mt-4 max-w-none space-y-4 text-muted-foreground">
+            <p>
+              I'm a product maker and civil engineer from Hyderabad, India, passionate about building products that create real value. I bridge civil engineering principles with technology to build smart, helpful tools.
+            </p>
+            <p>
+              As a believer in open source and building in public, I also enjoy educating others about technology and business on my blog, Hustler's Point.
             </p>
           </div>
-          <div>
-            <h2 className="font-headline text-3xl font-bold">Founder's Note</h2>
-            <blockquote className="mt-4 border-l-4 border-primary pl-4 italic text-muted-foreground">
-              "Built for the bold minds redefining the digital world. We're here to champion your journey, celebrate your wins, and provide the fuel for your hustle. Welcome to the community."
-            </blockquote>
-          </div>
-        </section>
-        
-        <section className="mt-20 text-center">
-           <h2 className="font-headline text-3xl font-bold tracking-tighter">Our Community Reach</h2>
-           <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-             We're proud of the community we're building. Here's a look at our growth and engagement.
-           </p>
-           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-             {analyticsData.map((item) => (
-                <Card key={item.label} className="text-center">
-                    <CardHeader>
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                            {item.icon}
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold">
-                           <AnimatedCounter to={item.value} />
-                        </p>
-                        <p className="mt-1 text-sm font-semibold">{item.label}</p>
-                        <p className="mt-2 text-xs text-muted-foreground">{item.description}</p>
-                    </CardContent>
-                </Card>
-             ))}
-           </div>
         </section>
 
-        <section className="mt-20 rounded-lg bg-card p-8 shadow-sm">
-          <div className="mx-auto max-w-lg text-center">
-            <h2 className="font-headline text-3xl font-bold">Join Our Newsletter</h2>
-            <p className="mt-2 text-muted-foreground">
-              Become part of the Hustler Point community. Get exclusive content, early access, and insights sent directly to your inbox.
+        <section>
+          <h2 className="font-headline text-3xl font-bold">My Journey</h2>
+          <div className="prose prose-lg dark:prose-invert mt-4 max-w-none space-y-4 text-muted-foreground">
+            <p>
+              My childhood dream was designing massive structures, which led me to civil engineering. The 2020 pandemic introduced me to coding, which felt like a superpower.
             </p>
-            <div className="mt-6">
-              <NewsletterSignup />
-            </div>
+            <p>
+              This newfound passion grew into side projects, freelance work in web development and design, and a deep fascination with AI. Now, I combine both worlds: using engineering for solid foundations and technology to bring ideas to life.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="font-headline text-3xl font-bold">Let's Connect</h2>
+          <div className="prose prose-lg dark:prose-invert mt-4 max-w-none space-y-4 text-muted-foreground">
+            <p>
+              I'm excited to connect with others via{' '}
+              <a href="mailto:neerajthammali@gmail.com" className="text-primary hover:underline">
+                email
+              </a>{' '}
+              and on{' '}
+              <a
+                href="https://www.linkedin.com/in/neerajtammali/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                LinkedIn
+              </a>{' '}
+              to chat about projects and ideas.
+            </p>
+            <p>
+              Currently, I'm open to discussing freelance projects and potential opportunities. If it's a good fit, I'd love to collaborate. I'm always looking to be part of something great.
+            </p>
           </div>
         </section>
       </div>
+
+      <footer className="mt-20 text-center">
+        <h2 className="font-headline text-3xl font-bold">Get In Touch</h2>
+        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+          I'm currently available for freelance work and open to discussing new projects. Feel free to reach out.
+        </p>
+        <div className="mt-6 flex justify-center gap-4">
+          <Button asChild>
+            <a href="mailto:neerajthammali@gmail.com">
+              <Mail className="mr-2 h-4 w-4" /> Contact Me
+            </a>
+          </Button>
+          <Button asChild variant="outline">
+            <a href="https://www.linkedin.com/in/neerajtammali/" target="_blank" rel="noopener noreferrer">
+              <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
+            </a>
+          </Button>
+        </div>
+      </footer>
     </div>
   );
 }
