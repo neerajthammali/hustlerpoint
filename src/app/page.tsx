@@ -50,7 +50,7 @@ export default function Home() {
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="flex flex-col items-center justify-center space-y-6 text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          Share Your Ideas. Build Your Future.
+          Publish Your Ideas. Build Your Future.
         </h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl">
           Hustler Point is where independent writers, founders, and creators publish powerful insights, grow their audience, and monetize their work with AI-powered tools.
