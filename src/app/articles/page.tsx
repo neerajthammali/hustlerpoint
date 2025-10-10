@@ -1,3 +1,4 @@
+
 import { Suspense } from 'react';
 import { getArticles, getEditorsPicks } from '@/lib/data';
 import ArticleCard from '@/components/article-card';

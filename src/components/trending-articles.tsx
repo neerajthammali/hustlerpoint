@@ -1,3 +1,4 @@
+
 import { getArticles } from '@/lib/data';
 import { suggestTrendingArticles } from '@/ai/flows/suggest-trending-articles';
 import Link from 'next/link';
