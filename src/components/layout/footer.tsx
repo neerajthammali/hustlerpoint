@@ -1,13 +1,11 @@
-
 "use client";
 
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAllArticles } from "@/lib/articles";
+import { Github, Linkedin } from "lucide-react";
+import React from "react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +17,18 @@ const navLinks = [
 const legalLinks = [
     { href: "/privacy-policy", label: "Privacy Policy" },
     { href: "/terms-of-service", label: "Terms of Service" },
+]
+
+const XIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+    </svg>
+)
+
+const socialLinks = [
+    { href: "https://twitter.com", label: "X", icon: <XIcon /> },
+    { href: "https://linkedin.com", label: "LinkedIn", icon: <Linkedin /> },
+    { href: "https://github.com", label: "GitHub", icon: <Github /> },
 ]
 
 export function Footer() {
@@ -69,16 +79,15 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-headline text-lg font-bold">Stay Updated</h3>
-              <p className="mt-4 text-sm text-muted-foreground">
-                  Subscribe for the latest articles and resources.
-              </p>
-              <form className="mt-4 flex w-full gap-2">
-                  <Input type="email" placeholder="Enter your email" className="flex-1" />
-                  <Button type="submit" size="icon" aria-label="Subscribe">
-                  <ArrowRight className="h-4 w-4" />
-                  </Button>
-              </form>
+                <h3 className="font-headline text-lg font-bold">Connect</h3>
+                <div className="mt-4 flex justify-center gap-4 md:justify-start">
+                    {socialLinks.map((link) => (
+                        <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-colors hover:text-foreground">
+                            {React.cloneElement(link.icon, { className: "h-5 w-5" })}
+                            <span className="sr-only">{link.label}</span>
+                        </a>
+                    ))}
+                </div>
             </div>
         </div>
 
