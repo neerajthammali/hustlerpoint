@@ -1,87 +1,12 @@
 'use client';
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarProvider,
-  SidebarTrigger,
-  useSidebar,
-} from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
-import {
-  LayoutDashboard,
-  Newspaper,
-  LineChart,
-  LogOut,
-  ChevronRight,
-  Settings,
-  Upload,
-} from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { useAuth } from '@/firebase';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/firebase';
-import { PropsWithChildren } from 'react';
-
-const AdminSidebar = () => {
-  const pathname = usePathname();
-  const auth = useAuth();
-  const router = useRouter();
-
-  const handleSignOut = () => {
-    auth.signOut().then(() => {
-      router.push('/login');
-    });
-  };
-
-  const menuItems = [
-    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/articles', label: 'Articles', icon: Newspaper },
-    { href: '/admin/analytics', label: 'Analytics', icon: LineChart },
-    { href: '/admin/settings', label: 'Settings', icon: Settings },
-    { href: '/admin/import', label: 'Import', icon: Upload },
-  ];
-
-  return (
-    <Sidebar>
-      <SidebarHeader>
-        <Logo />
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                href={item.href}
-                isActive={pathname === item.href}
-                asChild
-              >
-                <a>
-                  <item.icon />
-                  {item.label}
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleSignOut}>
-              <LogOut />
-              Sign Out
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-    </Sidebar>
-  );
-};
+import { Button } from '@/components/ui/button';
+import { useAuth, useUser } from '@/firebase';
+import { LogOut, Newspaper } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { type PropsWithChildren } from 'react';
 
 function AuthGuard({ children }: PropsWithChildren) {
   const { user, isUserLoading } = useUser();
@@ -103,27 +28,62 @@ function AuthGuard({ children }: PropsWithChildren) {
   return <>{children}</>;
 }
 
-
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isEditorPage = pathname.startsWith('/admin/articles/new') || pathname.startsWith('/admin/articles/edit');
+  const auth = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    auth.signOut().then(() => {
+      router.push('/login');
+    });
+  };
+
+  const isEditorPage =
+    pathname.startsWith('/admin/articles/new') ||
+    pathname.startsWith('/admin/articles/edit');
 
   if (isEditorPage) {
     return <AuthGuard>{children}</AuthGuard>;
   }
-  
+
   return (
     <AuthGuard>
-      <SidebarProvider>
-        <div className="flex h-full">
-          <AdminSidebar />
-          <main className="flex-1 overflow-y-auto p-8">{children}</main>
-        </div>
-      </SidebarProvider>
+      <div className="flex min-h-screen w-full flex-col">
+        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+            <Link
+              href="/admin/articles"
+              className="flex items-center gap-2 text-lg font-semibold md:text-base"
+            >
+              <Logo />
+              <span className="sr-only">Hustler Point</span>
+            </Link>
+            <Link
+              href="/admin/articles"
+              className="text-foreground transition-colors hover:text-foreground"
+            >
+              Articles
+            </Link>
+          </nav>
+          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+            <div className="ml-auto flex-1 sm:flex-initial">
+              {/* Search can be added here later */}
+            </div>
+            <Button onClick={handleSignOut} variant="outline" size="sm">
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+          {children}
+        </main>
+      </div>
     </AuthGuard>
   );
 }
