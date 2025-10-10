@@ -18,6 +18,8 @@ import {
   LineChart,
   LogOut,
   ChevronRight,
+  Settings,
+  Upload,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/firebase';
@@ -40,6 +42,8 @@ const AdminSidebar = () => {
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/articles', label: 'Articles', icon: Newspaper },
     { href: '/admin/analytics', label: 'Analytics', icon: LineChart },
+    { href: '/admin/settings', label: 'Settings', icon: Settings },
+    { href: '/admin/import', label: 'Import', icon: Upload },
   ];
 
   return (

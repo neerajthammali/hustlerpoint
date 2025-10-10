@@ -139,6 +139,22 @@
       "required": [
         "email"
       ]
+    },
+    "Settings": {
+      "title": "Settings",
+      "type": "object",
+      "description": "Represents the publication settings.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the publication."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the publication."
+        }
+      },
+      "required": ["name", "description"]
     }
   },
   "auth": {
@@ -170,6 +186,12 @@
         "$ref": "#/entities/Admin"
       },
       "description": "Stores admin users. The document ID is the user's UID."
+    },
+    "/settings/{settingsId}": {
+        "schema": {
+            "$ref": "#/entities/Settings"
+        },
+        "description": "Stores publication settings as a singleton document (e.g., ID 'main')."
     }
   }
 }

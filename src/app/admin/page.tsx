@@ -89,12 +89,16 @@ export default function AdminDashboardPage() {
                 <div className="rounded-lg border p-4">
                     <h4 className="font-semibold">Finish your publication settings</h4>
                     <p className="mt-1 text-sm text-muted-foreground">Add the basics—name, logo, and description—so readers instantly recognize you</p>
-                    <Button variant="outline" className="mt-4">Complete setup</Button>
+                    <Button asChild variant="outline" className="mt-4">
+                      <Link href="/admin/settings">Complete setup</Link>
+                    </Button>
                 </div>
                 <div className="rounded-lg border p-4">
                     <h4 className="font-semibold">Import your subscribers & content lists</h4>
                     <p className="mt-1 text-sm text-muted-foreground">Seamlessly bring your existing audience and past posts into one click</p>
-                    <Button variant="outline" className="mt-4">Import audience</Button>
+                    <Button asChild variant="outline" className="mt-4">
+                      <Link href="/admin/import">Import audience</Link>
+                    </Button>
                 </div>
             </div>
         </CardContent>
