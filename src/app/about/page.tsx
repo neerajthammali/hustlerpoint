@@ -32,11 +32,11 @@ export default function AboutPage() {
           <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12 rounded-lg bg-card p-8 shadow-sm">
             <div className="flex-shrink-0">
               <Image
-                src="https://picsum.photos/seed/profile/160/160"
+                src="/profile.jpg"
                 alt="Neeraj Thammali"
                 width={160}
                 height={160}
-                className="rounded-full border-4 border-primary/20 shadow-lg"
+                className="rounded-full border-4 border-primary/20 shadow-lg object-cover"
                 data-ai-hint="founder portrait"
               />
             </div>
