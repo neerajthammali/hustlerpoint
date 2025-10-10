@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { ArrowRight, BarChart, TrendingUp, Users } from 'lucide-react';
 
@@ -44,8 +45,6 @@ export default function Home() {
     <BarChart key="bar-chart" className="h-8 w-8 text-primary" />,
   ];
 
-  const marqueeStats = [...stats, ...stats];
-
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="flex flex-col items-center justify-center space-y-8 text-center">
@@ -60,18 +59,11 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative mt-16 w-full overflow-hidden group">
-          <div className="flex whitespace-nowrap group-hover:[animation-play-state:paused]">
-              <div className="marquee flex min-w-full flex-shrink-0 items-center justify-around">
-                  {marqueeStats.map((stat, index) => (
-                      <StatBlock key={`${stat.label}-${index}`} stat={stat} icon={statIcons[index % statIcons.length]} />
-                  ))}
-              </div>
-              <div aria-hidden="true" className="marquee2 flex min-w-full flex-shrink-0 items-center justify-around">
-                  {marqueeStats.map((stat, index) => (
-                      <StatBlock key={`${stat.label}-2-${index}`} stat={stat} icon={statIcons[index % statIcons.length]} />
-                  ))}
-              </div>
+      <div className="relative mt-16 w-full">
+          <div className="flex items-center justify-center">
+              {stats.map((stat, index) => (
+                  <StatBlock key={`${stat.label}-${index}`} stat={stat} icon={statIcons[index % statIcons.length]} />
+              ))}
           </div>
       </div>
 
