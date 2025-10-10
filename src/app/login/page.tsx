@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -21,8 +22,8 @@ import { useUser } from '@/firebase';
 import { useEffect } from 'react';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@example.com');
+  const [password, setPassword] = useState('password');
   const [error, setError] = useState<string | null>(null);
   const auth = useAuth();
   const router = useRouter();
@@ -67,8 +68,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account. For this demo, an
-            account will be created if it doesn't exist.
+            Enter your email below to login to your account. For this demo, use the test credentials provided or create a new account if it doesn't exist.
           </CardDescription>
         </CardHeader>
         <CardContent>
