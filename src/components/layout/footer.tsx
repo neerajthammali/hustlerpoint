@@ -1,6 +1,9 @@
 
+"use client";
+
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -10,6 +13,11 @@ const navLinks = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+  
   return (
     <footer className="border-t bg-card">
       <div className="container mx-auto flex flex-col items-center justify-between gap-6 px-4 py-8 sm:flex-row">
