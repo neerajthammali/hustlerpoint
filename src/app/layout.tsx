@@ -8,8 +8,8 @@ import { Toaster } from '@/components/ui/toaster';
 
 
 export const metadata: Metadata = {
-  title: 'Hustler Point Hub',
-  description: 'Hustler Point – Where Insight Meets Impact.',
+  title: 'Hustler Point - Publish, Grow, and Monetize Your Ideas',
+  description: 'A creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.',
 };
 
 export default function RootLayout({

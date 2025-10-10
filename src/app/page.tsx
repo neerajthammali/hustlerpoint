@@ -50,19 +50,19 @@ export default function Home() {
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="flex flex-col items-center justify-center space-y-6 text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          Hustler's Point
+          Share Your Ideas. Build Your Future.
         </h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl">
-          Your source for sharp, actionable insights into tech, creativity, and startup culture. We provide practical guides to help you navigate the digital world, build your brand, and turn your ideas into reality.
+          Hustler Point is where independent writers, founders, and creators publish powerful insights, grow their audience, and monetize their work with AI-powered tools.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button asChild size="lg">
             <Link href="/articles">
-              Read Articles <ArrowRight className="ml-2 h-4 w-4" />
+              Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/about">About Us</Link>
+            <Link href="/about">Learn More</Link>
           </Button>
         </div>
       </div>
@@ -99,9 +99,9 @@ export default function Home() {
       </section>
 
       <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Our Expertise</h2>
+        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">A Platform Built for Impact</h2>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
-          We focus on the topics that matter most to modern hustlers.
+          We focus on the tools and topics that matter most to modern creators.
         </p>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
             {expertiseAreas.map((item) => (

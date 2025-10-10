@@ -13,3 +13,6 @@ export interface Article {
   imageId?: string;
   author: string;
   publishedDate: string;
+  content: string;
+  engagement: number;
+}
