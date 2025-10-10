@@ -88,4 +88,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <TrendingArticles currentArticleSlug={article.slug} />
              <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-6">
                 <p className="text-sm font-semibold">Share this article</p>
-                <ShareButtons article={{
+                <ShareButtons article={{ title: article.title, slug: article.slug }} />
+              </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}

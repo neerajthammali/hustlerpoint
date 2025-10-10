@@ -10,4 +10,8 @@ export const ai = genkit({
   })],
   // The model to use for generation.
   model: 'gemini-1.5-flash-latest',
-  // Configure
+  // Configure the logger to only log errors.
+  logLevel: 'error',
+  // This allows to use streaming APIs.
+  enableStreaming: true,
+});
