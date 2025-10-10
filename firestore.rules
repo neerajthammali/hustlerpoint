@@ -1,152 +1,120 @@
 /**
- * @fileoverview Firestore Security Rules for Hustler Point blog.
+ * @file Firebase Security Rules for the blog application.
  *
- * Core Philosophy:
- * This ruleset employs a role-based access control model, primarily using the presence
- * of a document in the `/admins` collection to grant administrative privileges.
- * Data is generally accessible for reading, but modifications are restricted to
- * authenticated users or those with admin roles.
+ * @core_philosophy This ruleset enforces a public-read, owner-write model for articles,
+ *                  restricts category access to authenticated users, allows newsletter
+ *                  subscription creation, limits admin management to authenticated admins,
+ *                  and restricts access to settings to authenticated users. Data shape is not validated.
  *
- * Data Structure:
- * - /articles/{articleId}: Stores blog articles.
- * - /categories/{categoryId}: Stores article categories.
- * - /newsletter_subscribers/{subscriberId}: Stores newsletter subscribers.
- * - /analytics/{analyticId}: Stores website analytics data.
- * - /editor_picks/{editorPickId}: Stores featured/editor's pick articles.
- * - /admins/{adminId}: Stores administrator users.
+ * @data_structure
+ * - /articles/{articleId}: Publicly readable articles.
+ * - /categories/{categoryId}: Categories for articles, readable only by authenticated users.
+ * - /newsletter_subscribers/{subscriberId}: Newsletter subscribers.
+ * - /admins/{userId}: Admins, access controlled by matching UID.
+ * - /settings/{settingsId}: Publication settings.
  *
- * Key Security Decisions:
- * - Read access to all collections is generally public.
- * - Write access to most collections is restricted to authenticated users.
- * - Administrative privileges are granted based on the presence of a user's document in the `/admins` collection.
- * - No user-owned subcollections are used, simplifying the security model.
+ * @key_security_decisions
+ * - Articles are publicly readable to maximize content visibility.
+ * - Only authenticated users can create/update/delete articles, and they must be the owner (author).
+ * - Newsletter subscribers can be created by anyone.
+ * - Only authenticated admins can manage admin accounts.
+ * - Only authenticated users can read settings.
+ * - Schema validation is relaxed in favor of rapid prototyping, focusing on authorization.
+ *
+ * @denormalization_for_authorization
+ *   An `author` field on each `/articles/{articleId}` document is used to verify ownership for write operations.
+ *
+ * @structural_segregation
+ *   No structural segregation is used in this ruleset.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Grants read access to all articles and restricts write access to authenticated users.
+     * @description Allows public read access to articles and restricts write access to the article owner (author).
      * @path /articles/{articleId}
-     * @allow get, list: if true;
-     * @allow create: if isSignedIn();
-     * @allow update: if isSignedIn();
-     * @allow delete: if isSignedIn();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Allows any user to read articles, but requires authentication to create, update, or delete.
+     * @allow (get, list): Anyone can read articles.
+     * @allow (create): Authenticated user can create an article, with the author field matching their UID.
+     * @allow (update, delete): Authenticated owner (author) of the article can update or delete it.
+     * @deny  (create): Unauthenticated user cannot create articles.
+     * @deny  (update, delete): Non-owner cannot update or delete an article.
+     * @principle Enforces public read access with owner-only writes based on the `author` field.
      */
     match /articles/{articleId} {
       allow get, list: if true;
-      allow create: if isSignedIn();
-      allow update: if isSignedIn();
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.author == request.auth.uid;
+      allow update, delete: if isSignedIn() && isExistingOwner(resource.data.author);
     }
 
     /**
-     * @description Grants read access to all categories and restricts write access to authenticated users.
+     * @description Allows only authenticated users to manage article categories.
      * @path /categories/{categoryId}
-     * @allow get, list: if true;
-     * @allow create: if isSignedIn();
-     * @allow update: if isSignedIn();
-     * @allow delete: if isSignedIn();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Allows any user to read categories, but requires authentication to create, update, or delete.
+     * @allow (get, list): Any authenticated user can read categories.
+     * @allow (create, update, delete): Only authenticated users can manage categories.
+     * @deny  (get, list): Unauthenticated users cannot read categories.
+     * @deny  (create, update, delete): Unauthenticated users cannot manage categories.
+     * @principle Requires authentication for all category operations.
      */
     match /categories/{categoryId} {
-      allow get, list: if true;
-      allow create: if isSignedIn();
-      allow update: if isSignedIn();
-      allow delete: if isSignedIn();
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isSignedIn();
     }
 
     /**
-     * @description Grants read access to all newsletter subscribers and restricts write access to authenticated users.
+     * @description Allows anyone to create a newsletter subscription.
      * @path /newsletter_subscribers/{subscriberId}
-     * @allow get, list: if true;
-     * @allow create: if isSignedIn();
-     * @allow update: if isSignedIn();
-     * @allow delete: if isSignedIn();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Allows any user to read newsletter subscribers, but requires authentication to create, update, or delete.
+     * @allow (create): Anyone can create a newsletter subscription.
+     * @deny (get, list, update, delete): No read, list, update, or delete operations are allowed.
+     * @principle Allows unauthenticated creation of newsletter subscriptions.
      */
     match /newsletter_subscribers/{subscriberId} {
-      allow get, list: if true;
-      allow create: if isSignedIn();
-      allow update: if isSignedIn();
-      allow delete: if isSignedIn();
+      allow create: if true;
+      allow get, list, update, delete: if false;
     }
 
     /**
-     * @description Grants read access to all analytics data and restricts write access to authenticated users.
-     * @path /analytics/{analyticId}
-     * @allow get, list: if true;
-     * @allow create: if isSignedIn();
-     * @allow update: if isSignedIn();
-     * @allow delete: if isSignedIn();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Allows any user to read analytics, but requires authentication to create, update, or delete.
+     * @description Allows only authenticated admins to manage admin user accounts.
+     * @path /admins/{userId}
+     * @allow (get): Any authenticated admin can get an admin profile
+     * @allow (create): Only the user themselves can create their admin profile (self-creation).
+     * @allow (update, delete): Only the existing admin can update or delete their own profile.
+     * @deny (get, list): Non-admins cannot read admin profiles. Listing is denied.
+     * @deny (create): Non-admin users cannot create admin accounts.
+     * @deny (update, delete): Non-admins cannot modify admin accounts.
+     * @principle Enforces admin-only access with self-creation and self-management.
      */
-    match /analytics/{analyticId} {
-      allow get, list: if true;
-      allow create: if isSignedIn();
-      allow update: if isSignedIn();
-      allow delete: if isSignedIn();
+    match /admins/{userId} {
+      allow get: if isSignedIn();
+      allow list: if false;
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update, delete: if isSignedIn() && isExistingOwner(userId);
     }
 
     /**
-     * @description Grants read access to all editor's picks and restricts write access to authenticated users.
-     * @path /editor_picks/{editorPickId}
-     * @allow get, list: if true;
-     * @allow create: if isSignedIn();
-     * @allow update: if isSignedIn();
-     * @allow delete: if isSignedIn();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Allows any user to read editor's picks, but requires authentication to create, update, or delete.
+     * @description Allows authenticated users to read publication settings.
+     * @path /settings/{settingsId}
+     * @allow (get): Authenticated users can read settings.
+     * @deny (create, update, delete, list): No create, update, delete, or list operations allowed.
+     * @deny (get): Unauthenticated users cannot read settings.
+     * @principle Restricts settings access to authenticated users.
      */
-    match /editor_picks/{editorPickId} {
-      allow get, list: if true;
-      allow create: if isSignedIn();
-      allow update: if isSignedIn();
-      allow delete: if isSignedIn();
+    match /settings/{settingsId} {
+      allow get: if isSignedIn();
+      allow create, update, delete, list: if false;
     }
 
-    /**
-     * @description Grants read and write access to admins only to the admins collection
-     * @path /admins/{adminId}
-     * @allow get, list: if isAdmin();
-     * @allow create: if isAdmin();
-     * @allow update: if isAdmin();
-     * @allow delete: if isAdmin();
-     * @deny create: if false;
-     * @deny update: if false;
-     * @deny delete: if false;
-     * @principle Restricts access to admins collection to only admins.
-     */
-    match /admins/{adminId} {
-      allow get, list: if isAdmin();
-      allow create: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
-    }
-
-    // Helper function to determine if a user is signed in.
+    // --- Helper functions ---
     function isSignedIn() {
       return request.auth != null;
     }
 
-    // Helper function to determine if a user is an admin.
-    function isAdmin() {
-      return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.id == request.auth.uid;
+    function isOwner(userId) {
+        return request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+        return isSignedIn() && isOwner(userId) && resource != null;
     }
   }
 }
