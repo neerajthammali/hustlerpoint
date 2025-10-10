@@ -38,9 +38,9 @@ export default function EditArticlePage() {
 
   return (
     <EditorAuthGuard>
-      <div className="min-h-screen w-full bg-background p-4 sm:p-6 md:p-8">
+      <div className="min-h-screen w-full bg-background">
         {isLoading && (
-            <div className="space-y-8">
+            <div className="space-y-8 p-4 sm:p-6 md:p-8">
                 <div className="flex items-center justify-end gap-4">
                     <Skeleton className="h-10 w-24" />
                     <Skeleton className="h-10 w-24" />

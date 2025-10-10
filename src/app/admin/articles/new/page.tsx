@@ -29,7 +29,7 @@ function EditorAuthGuard({ children }: PropsWithChildren) {
 export default function NewArticlePage() {
   return (
     <EditorAuthGuard>
-      <div className="min-h-screen w-full bg-background p-4 sm:p-6 md:p-8">
+      <div className="min-h-screen w-full bg-background">
         <ArticleForm />
       </div>
     </EditorAuthGuard>

@@ -105,6 +105,13 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isEditorPage = pathname.startsWith('/admin/articles/new') || pathname.startsWith('/admin/articles/edit');
+
+  if (isEditorPage) {
+    return <AuthGuard>{children}</AuthGuard>;
+  }
+  
   return (
     <AuthGuard>
       <SidebarProvider>
