@@ -53,7 +53,7 @@ export default function Home() {
           Publish Your Ideas. Build Your Future.
         </h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl">
-          Hustler Point is where independent writers, founders, and creators publish powerful insights, grow their audience, and monetize their work with AI-powered tools.
+          Hustler Point is a creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button asChild size="lg">

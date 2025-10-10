@@ -2,7 +2,6 @@
 "use client";
 
 import Link from "next/link";
-import { Logo } from "@/components/logo";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";

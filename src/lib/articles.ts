@@ -1,32 +1,38 @@
 
+'use server';
+
 import { type Article } from './types';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
-// Function to get articles from the API, intended for client-side use.
-async function getArticlesFromApi(): Promise<Article[]> {
-    // In a real app, you might want to fetch from a full URL
-    const res = await fetch('/api/articles'); 
-    if (!res.ok) {
-        console.error('Failed to fetch articles');
-        return [];
-    }
-    return res.json();
-}
+const articlesDirectory = path.join(process.cwd(), 'src/articles');
 
-/**
- * Fetches all articles.
- * This function is universal:
- * - On the server, it reads from the file system.
- * - On the client, it fetches from an API route.
- */
+// This function is guaranteed to only run on the server.
 export async function getAllArticles(): Promise<Article[]> {
-    if (typeof window === 'undefined') {
-        // We are on the server, so we can import the server-only code.
-        const { getAllArticles: getAllArticlesServer } = await import('./articles.server');
-        return getAllArticlesServer();
-    } else {
-        // We are on the client
-        return getArticlesFromApi();
-    }
+    const fileNames = fs.readdirSync(articlesDirectory);
+    const allArticlesData = fileNames.map(fileName => {
+        const slug = fileName.replace(/\.md$/, '');
+        const fullPath = path.join(articlesDirectory, fileName);
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const { data: frontmatter, content } = matter(fileContents);
+
+        // This is a hack to give a somewhat unique ID and engagement score
+        // In a real app, this would come from a database.
+        const engagement = frontmatter.title.length * 10 % 100;
+        const imageId = `article-${(engagement % 5) + 1}`;
+
+        return {
+            slug,
+            content,
+            engagement,
+            imageId,
+            ...frontmatter,
+            publishedDate: new Date(frontmatter.publishedDate).toISOString(),
+        } as Article;
+    });
+
+    return allArticlesData.sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
