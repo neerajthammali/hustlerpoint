@@ -54,4 +54,10 @@ const ArticleRenderer: React.FC<ArticleRendererProps> = ({ content }) => {
         }
 
         // Paragraph
-        return
+        return <p key={index}>{block}</p>;
+      })}
+    </div>
+  );
+};
+
+export default ArticleRenderer;

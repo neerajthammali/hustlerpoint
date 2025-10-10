@@ -47,6 +47,15 @@ export default function Comments() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <p className="font-semibold">{comment.author}</p>
-                    <p className="text-xs text-muted-foreground">{comment.date}</p>                  </div>
+                    <p className="text-xs text-muted-foreground">{comment.date}</p>
+                  </div>
                   <p className="mt-1 text-sm text-foreground/90">{comment.text}</p>
-                
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
