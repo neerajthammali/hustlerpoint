@@ -1,30 +1,25 @@
 {
   "entities": {
     "Article": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Article",
       "type": "object",
       "description": "Represents a blog article.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Article entity."
-        },
         "title": {
           "type": "string",
           "description": "Title of the article."
         },
-        "contentLink": {
+        "content": {
           "type": "string",
-          "description": "Link to the article content (e.g., Google Docs, external URL)."
+          "description": "The full content of the article, likely in Markdown or HTML."
         },
         "author": {
           "type": "string",
           "description": "Author of the article."
         },
-        "categoryId": {
+        "category": {
           "type": "string",
-          "description": "Reference to Category. (Relationship: Category 1:N Article)"
+          "description": "The category of the article."
         },
         "slug": {
           "type": "string",
@@ -32,50 +27,70 @@
         },
         "keywords": {
           "type": "string",
-          "description": "Keywords for SEO optimization."
+          "description": "Comma-separated keywords for SEO."
         },
         "metaDescription": {
           "type": "string",
-          "description": "Meta description for SEO optimization."
+          "description": "Meta description for SEO."
         },
         "canonicalUrl": {
           "type": "string",
-          "description": "Canonical URL of the article."
+          "description": "Canonical URL if the content is republished."
         },
         "publishedDate": {
           "type": "string",
-          "description": "Date and time the article was published.",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "The date the article was published."
         },
-        "thumbnailUrl": {
+        "createdAt": {
           "type": "string",
-          "description": "URL of the article's thumbnail image."
+          "format": "date-time",
+          "description": "Timestamp of when the article was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the article was last updated."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "published", "scheduled"],
+          "description": "The publishing status of the article."
+        },
+        "featured": {
+          "type": "boolean",
+          "description": "Whether the article is a featured post."
+        },
+        "imageId": {
+          "type": "string",
+          "description": "ID for the placeholder image."
+        },
+        "engagement": {
+            "type": "number",
+            "description": "Metric for user engagement."
+        },
+        "excerpt": {
+            "type": "string",
+            "description": "A short summary of the article."
         }
       },
       "required": [
-        "id",
         "title",
-        "contentLink",
-        "author",
-        "categoryId",
+        "content",
         "slug",
-        "keywords",
-        "metaDescription",
-        "canonicalUrl",
+        "author",
+        "category",
+        "status",
         "publishedDate",
-        "thumbnailUrl"
+        "createdAt",
+        "updatedAt"
       ]
     },
     "Category": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
       "description": "Represents a category for articles.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Category entity."
-        },
         "name": {
           "type": "string",
           "description": "Name of the category."
@@ -86,232 +101,75 @@
         }
       },
       "required": [
-        "id",
-        "name",
-        "description"
+        "name"
       ]
     },
     "NewsletterSubscriber": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "NewsletterSubscriber",
       "type": "object",
       "description": "Represents a newsletter subscriber.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the NewsletterSubscriber entity."
-        },
         "email": {
           "type": "string",
-          "description": "Email address of the subscriber.",
-          "format": "email"
+          "format": "email",
+          "description": "Email address of the subscriber."
         },
         "subscriptionDate": {
           "type": "string",
-          "description": "Date and time the user subscribed.",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date and time the user subscribed."
         }
       },
       "required": [
-        "id",
         "email",
         "subscriptionDate"
       ]
     },
-    "Analytic": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Analytic",
-      "type": "object",
-      "description": "Represents analytics data for the website.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Analytic entity."
-        },
-        "date": {
-          "type": "string",
-          "description": "Date of the analytics data.",
-          "format": "date-time"
-        },
-        "impressions": {
-          "type": "number",
-          "description": "Number of impressions."
-        },
-        "engagement": {
-          "type": "number",
-          "description": "Engagement rate or count."
-        },
-        "views": {
-          "type": "number",
-          "description": "Number of views."
-        }
-      },
-      "required": [
-        "id",
-        "date",
-        "impressions",
-        "engagement",
-        "views"
-      ]
-    },
-    "EditorPick": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "EditorPick",
-      "type": "object",
-      "description": "Represents an editor's pick article.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the EditorPick entity."
-        },
-        "articleId": {
-          "type": "string",
-          "description": "Reference to Article. (Relationship: Article 1:1 EditorPick)"
-        },
-        "dateAdded": {
-          "type": "string",
-          "description": "Date and time the article was added as an editor's pick.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "articleId",
-        "dateAdded"
-      ]
-    },
     "Admin": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Admin",
       "type": "object",
       "description": "Represents an admin user.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Admin entity."
-        },
-        "username": {
-          "type": "string",
-          "description": "Username of the admin."
-        },
         "email": {
           "type": "string",
-          "description": "Email address of the admin.",
-          "format": "email"
+          "format": "email",
+          "description": "Email address of the admin."
         }
       },
       "required": [
-        "id",
-        "username",
         "email"
       ]
     }
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous"
+      "password"
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/articles/{articleId}",
-        "definition": {
-          "entityName": "Article",
-          "schema": {
-            "$ref": "#/backend/entities/Article"
-          },
-          "description": "Stores blog articles. Includes categoryId for filtering. The ID is the document ID",
-          "params": [
-            {
-              "name": "articleId",
-              "description": "Unique identifier for the article."
-            }
-          ]
-        }
+    "/articles/{articleId}": {
+      "schema": {
+        "$ref": "#/entities/Article"
       },
-      {
-        "path": "/categories/{categoryId}",
-        "definition": {
-          "entityName": "Category",
-          "schema": {
-            "$ref": "#/backend/entities/Category"
-          },
-          "description": "Stores article categories. The ID is the document ID",
-          "params": [
-            {
-              "name": "categoryId",
-              "description": "Unique identifier for the category."
-            }
-          ]
-        }
+      "description": "Stores all blog articles. Each document is an article."
+    },
+    "/categories/{categoryId}": {
+      "schema": {
+        "$ref": "#/entities/Category"
       },
-      {
-        "path": "/newsletter_subscribers/{subscriberId}",
-        "definition": {
-          "entityName": "NewsletterSubscriber",
-          "schema": {
-            "$ref": "#/backend/entities/NewsletterSubscriber"
-          },
-          "description": "Stores newsletter subscribers. The ID is the document ID",
-          "params": [
-            {
-              "name": "subscriberId",
-              "description": "Unique identifier for the newsletter subscriber."
-            }
-          ]
-        }
+      "description": "Stores article categories."
+    },
+    "/newsletter_subscribers/{subscriberId}": {
+      "schema": {
+        "$ref": "#/entities/NewsletterSubscriber"
       },
-      {
-        "path": "/analytics/{analyticId}",
-        "definition": {
-          "entityName": "Analytic",
-          "schema": {
-            "$ref": "#/backend/entities/Analytic"
-          },
-          "description": "Stores website analytics data. The ID is the document ID",
-          "params": [
-            {
-              "name": "analyticId",
-              "description": "Unique identifier for the analytic data."
-            }
-          ]
-        }
+      "description": "Stores newsletter subscribers."
+    },
+    "/admins/{userId}": {
+      "schema": {
+        "$ref": "#/entities/Admin"
       },
-      {
-        "path": "/editor_picks/{editorPickId}",
-        "definition": {
-          "entityName": "EditorPick",
-          "schema": {
-            "$ref": "#/backend/entities/EditorPick"
-          },
-          "description": "Stores featured/editor's pick articles. Includes articleId. The ID is the document ID",
-          "params": [
-            {
-              "name": "editorPickId",
-              "description": "Unique identifier for the editor's pick."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/admins/{adminId}",
-        "definition": {
-          "entityName": "Admin",
-          "schema": {
-            "$ref": "#/backend/entities/Admin"
-          },
-          "description": "Stores administrator users. Existence of a document grants admin privileges. The ID is the document ID",
-          "params": [
-            {
-              "name": "adminId",
-              "description": "Unique identifier for the admin."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The Firestore structure is designed to balance the needs of content management, analytics, and user engagement for the Hustler Point blog, while adhering to the principles of Authorization Independence, Structural Segregation, and Access Modeling. It uses denormalization where necessary to avoid complex `get()` calls in security rules.\n\n*   `/articles`: This collection stores the main content. Includes the categoryId. Each document represents a blog post.\n*   `/categories`: This collection stores categories for articles.\n*   `/newsletter_subscribers`: This collection stores newsletter subscribers.\n*   `/analytics`: This collection stores website analytics data.\n*   `/editor_picks`: This collection stores featured/editor's pick articles.\n*   `/admins`: This collection stores administrator users. The existence of a document in this collection grants admin privileges.\n\n**Authorization Independence and QAPs**:\n\n*   Authorization Independence is achieved by storing roles directly in the database (DBAC) and avoiding hierarchical dependencies. Admins are identified by their presence in the `/admins` collection, eliminating the need for `get()` calls to parent documents.\n*   The structure supports secure `list` operations (QAPs) by segregating data based on its access requirements. For example, analytics data is stored in a separate collection with its own specific security rules, ensuring that only authorized users can access it.\n\nThis structure provides a clear and maintainable data model for the Hustler Point blog, supporting its core features while adhering to best practices for Firestore security and scalability."
+      "description": "Stores admin users. The document ID is the user's UID."
+    }
   }
 }
