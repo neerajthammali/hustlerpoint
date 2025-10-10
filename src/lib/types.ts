@@ -1,4 +1,5 @@
 
+
 export type Stat = {
   label: string;
   value: number;
@@ -15,4 +16,6 @@ export interface Article {
   publishedDate: string;
   content: string;
   engagement: number;
+  publishedAt: string;
 }
+

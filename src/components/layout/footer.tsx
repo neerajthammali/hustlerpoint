@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -6,6 +7,8 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getAllArticles } from "@/lib/articles";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -14,57 +17,97 @@ const navLinks = [
   { href: "mailto:neerajthammali@gmail.com", label: "Contact" },
 ];
 
+const legalLinks = [
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-of-service", label: "Terms of Service" },
+]
+
 export function Footer() {
+  const [categories, setCategories] = useState<string[]>([]);
+  
+  useEffect(() => {
+    async function fetchCategories() {
+      const articles = await getAllArticles();
+      const uniqueCategories = [...new Set(articles.map(article => article.category))];
+      setCategories(uniqueCategories);
+    }
+    fetchCategories();
+  }, []);
+
   return (
     <footer className="border-t bg-card">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-start md:col-span-1">
+        <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-4 md:text-left">
+            <div className="flex flex-col items-center md:items-start">
                 <Logo />
                 <p className="mt-4 text-sm text-muted-foreground">
                     Actionable insights for creators, developers, and founders.
                 </p>
             </div>
-            <div className="md:col-span-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="font-headline text-lg font-bold">Stay Updated</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Subscribe to our newsletter for the latest articles and resources.
-                  </p>
-                  <form className="mt-4 flex gap-2">
-                    <Input type="email" placeholder="Enter your email" className="flex-1" />
-                    <Button type="submit" size="icon" aria-label="Subscribe">
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </form>
-                </div>
-                <div>
-                  <h3 className="font-headline text-lg font-bold">Follow Us</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Connect with us on social media for daily insights.
-                  </p>
-                   <div className="mt-4 flex gap-2">
-                     {/* Add social links here */}
-                   </div>
-                </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:col-span-3 gap-8">
+              <div>
+                <h3 className="font-headline text-lg font-bold">Navigation</h3>
+                <ul className="mt-4 space-y-2">
+                  {navLinks.map((link) => (
+                     <li key={link.label}>
+                       {link.label === 'Contact' ? (
+                          <a href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">{link.label}</a>
+                        ) : (
+                          <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                           {link.label}
+                          </Link>
+                        )}
+                     </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-headline text-lg font-bold">Categories</h3>
+                <ul className="mt-4 space-y-2">
+                  {categories.map((category) => (
+                    <li key={category}>
+                      <Link href={`/category/${category.toLowerCase()}`} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                        {category}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-headline text-lg font-bold">Legal</h3>
+                <ul className="mt-4 space-y-2">
+                    {legalLinks.map((link) => (
+                        <li key={link.label}>
+                            <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                                {link.label}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
               </div>
             </div>
         </div>
+
+        <div className="mt-12 border-t pt-8">
+            <h3 className="font-headline text-lg font-bold text-center">Stay Updated</h3>
+            <p className="mt-2 text-sm text-muted-foreground text-center mx-auto max-w-md">
+                Subscribe to our newsletter for the latest articles, resources, and insights from the creator economy.
+            </p>
+            <form className="mt-4 flex max-w-sm mx-auto gap-2">
+                <Input type="email" placeholder="Enter your email" className="flex-1" />
+                <Button type="submit" size="icon" aria-label="Subscribe">
+                <ArrowRight className="h-4 w-4" />
+                </Button>
+            </form>
+        </div>
+
         <Separator className="my-8" />
+
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Hustler Point. All rights reserved.</p>
-          <nav className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
-            {navLinks.map((link) => (
-              link.label === 'Contact' ? (
-                  <a key={link.href} href={link.href} className="transition-colors hover:text-foreground">{link.label}</a>
-              ) : (
-                  <Link key={link.href} href={link.href} className="transition-colors hover:text-foreground">
-                  {link.label}
-                  </Link>
-              )
-            ))}
-          </nav>
         </div>
       </div>
     </footer>
