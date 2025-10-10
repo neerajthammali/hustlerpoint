@@ -7,10 +7,8 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -20,19 +18,34 @@ import { useFirestore } from '@/firebase';
 import { collection, doc, setDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Label } from '@/components/ui/label';
+import { 
+    Upload, 
+    Image as ImageIcon, 
+    Loader2,
+    Undo,
+    Redo,
+    Link,
+    Bold,
+    Italic,
+    Strikethrough,
+    Code,
+    List,
+    ListOrdered,
+    MessageSquare,
+    ChevronDown,
+    CheckCircle2
+} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Title is required.' }),
-  slug: z.string().optional(),
+  subtitle: z.string().optional(),
   content: z.string().min(1, { message: 'Content cannot be empty.' }),
-  category: z.string().min(1, { message: 'Please select a category.' }),
+  category: z.string().optional(),
   status: z.enum(['draft', 'published', 'scheduled']),
-  metaDescription: z.string().optional(),
-  keywords: z.string().optional(),
-  canonicalUrl: z.string().optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 type ArticleFormValues = z.infer<typeof formSchema>;
@@ -41,6 +54,24 @@ interface ArticleFormProps {
   articleId?: string;
   initialData?: Partial<ArticleFormValues>;
 }
+
+const EditorToolbar = () => (
+    <div className="flex items-center space-x-2">
+        <Button variant="ghost" size="icon"><Undo className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><Redo className="h-4 w-4" /></Button>
+        <Separator orientation="vertical" className="h-6 mx-2" />
+        <Button variant="ghost" size="icon"><Bold className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><Italic className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><Strikethrough className="h-4 w-4" /></Button>
+        <Separator orientation="vertical" className="h-6 mx-2" />
+        <Button variant="ghost" size="icon"><Link className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><Code className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><List className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon"><ListOrdered className="h-4 w-4" /></Button>
+        <Separator orientation="vertical" className="h-6 mx-2" />
+        <Button variant="ghost" size="icon"><MessageSquare className="h-4 w-4" /></Button>
+    </div>
+)
 
 export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
   const firestore = useFirestore();
@@ -51,13 +82,11 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       title: '',
-      slug: '',
+      subtitle: '',
       content: '',
       category: '',
       status: 'draft',
-      metaDescription: '',
-      keywords: '',
-      canonicalUrl: '',
+      tags: [],
     },
   });
 
@@ -65,7 +94,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
 
   const onSubmit = async (values: ArticleFormValues) => {
     try {
-      const slug = values.slug || values.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const slug = values.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const dataToSave = {
         ...values,
         slug,
@@ -73,12 +102,10 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
       };
 
       if (articleId) {
-        // Update existing document
         const articleRef = doc(firestore, 'articles', articleId);
         await setDoc(articleRef, dataToSave, { merge: true });
         toast({ title: 'Success', description: 'Article updated successfully.' });
       } else {
-        // Create new document
         const articlesCollection = collection(firestore, 'articles');
         await addDoc(articlesCollection, {
           ...dataToSave,
@@ -88,6 +115,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
           imageId: `article-${Math.floor(Math.random() * 5) + 1}`,
           engagement: 0,
           featured: false,
+          excerpt: values.subtitle
         });
         toast({ title: 'Success', description: 'Article created successfully.' });
       }
@@ -101,145 +129,115 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        
-        {/* Header Bar */}
-        <div className="flex items-center justify-end gap-4 py-4 border-b">
-           <Button type="submit" variant="ghost" disabled={isSubmitting}>
-             {articleId ? 'Save Changes' : 'Save Draft'}
-           </Button>
-           <Popover>
-            <PopoverTrigger asChild>
-                <Button type="button" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Publishing...
-                        </>
-                    ) : (
-                        'Publish'
-                    )}
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-                <div className="grid gap-4">
-                    <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Publishing Options</h4>
-                        <p className="text-sm text-muted-foreground">
-                        Set category, status, and SEO settings before publishing.
-                        </p>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="h-screen w-full flex flex-col">
+            {/* Header */}
+            <header className="flex-shrink-0 flex items-center justify-between p-4 border-b">
+                <div className="flex items-center gap-2 text-sm">
+                    <Badge variant={form.getValues('status') === 'published' ? 'default' : 'secondary'}>
+                        {form.getValues('status') === 'draft' ? 'Draft' : 'Published'}
+                    </Badge>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <span>Synced</span>
                     </div>
-                     <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select a category" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Tech">Tech</SelectItem>
-                                    <SelectItem value="Creators">Creators</SelectItem>
-                                    <SelectItem value="Startups">Startups</SelectItem>
-                                    <SelectItem value="Tech Culture">Tech Culture</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
+                </div>
+
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <EditorToolbar />
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 rounded-md bg-muted p-0.5">
+                        <Button size="sm" variant={ 'default'} className="px-3 h-7">Write</Button>
+                        <Button size="sm" variant={'ghost'} className="px-3 h-7">Style</Button>
+                    </div>
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src="https://picsum.photos/seed/avatar/32/32" />
+                        <AvatarFallback>A</AvatarFallback>
+                    </Avatar>
+                </div>
+            </header>
+
+            {/* Editor Body */}
+            <main className="flex-1 overflow-y-auto">
+                <div className="max-w-3xl mx-auto py-12 px-4">
+                    <div className="flex items-center gap-4 mb-8">
+                        <Button variant="ghost" className="text-muted-foreground"><ImageIcon className="mr-2 h-4 w-4" /> Add thumbnail</Button>
+                        <Button variant="ghost" className="text-muted-foreground">Add content tags</Button>
+                    </div>
+
+                    <div className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="New Post"
+                                            className="resize-none border-none text-4xl lg:text-5xl font-extrabold tracking-tight p-0 shadow-none focus-visible:ring-0 leading-tight"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
                         <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="draft">Draft</SelectItem>
-                                    <SelectItem value="published">Published</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
+                            control={form.control}
+                            name="subtitle"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Add a subtitle"
+                                            className="resize-none border-none text-xl text-muted-foreground p-0 shadow-none focus-visible:ring-0"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    <Button 
-                        type="button" 
-                        onClick={() => {
-                            form.setValue('status', 'published');
-                            form.handleSubmit(onSubmit)();
-                        }}
-                        disabled={isSubmitting}
-                    >
-                       Confirm & Publish
-                    </Button>
-                </div>
-            </PopoverContent>
-           </Popover>
-        </div>
-        
-        <div className="mx-auto max-w-3xl space-y-8">
-            {/* Cover Image Upload */}
-            <div className="flex items-center justify-center w-full">
-                <div className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <ImageIcon className="w-10 h-10 mb-4 text-muted-foreground" />
-                        <p className="mb-2 text-sm text-muted-foreground">Add a cover image to your article.</p>
-                        <Button type="button" variant="outline" size="sm">
-                            <Upload className="mr-2 h-4 w-4" />
-                            Upload from computer
-                        </Button>
+
+                         <div className="flex items-center gap-2 pt-4">
+                             {/* Placeholder for tags/categories */}
+                         </div>
+
+                        <FormField
+                            control={form.control}
+                            name="content"
+                            render={({ field }) => (
+                                <FormItem className="pt-8">
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Start writing..."
+                                            className="min-h-[400px] resize-none border-none p-0 text-lg focus-visible:ring-0 shadow-none"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                 </div>
-            </div>
+            </main>
 
-            {/* Article Title */}
-            <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-                <FormItem>
-                <FormControl>
-                    <Textarea
-                    placeholder="Article Title"
-                    className="resize-none border-none text-4xl font-extrabold tracking-tight focus-visible:ring-0 p-0 shadow-none"
-                    {...field}
-                    />
-                </FormControl>
-                <FormMessage />
-                </FormItem>
-            )}
-            />
-
-            {/* Article Content */}
-            <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-                <FormItem>
-                <FormControl>
-                    <Textarea
-                    placeholder="Write here. You can also include @mentions..."
-                    className="min-h-[400px] resize-none border-none p-0 text-lg focus-visible:ring-0 shadow-none"
-                    {...field}
-                    />
-                </FormControl>
-                <FormMessage />
-                </FormItem>
-            )}
-            />
-        </div>
-      </form>
+            {/* Footer Actions */}
+            <footer className="flex-shrink-0 flex items-center justify-end p-4 border-t gap-4">
+                <Button type="button" variant="outline" onClick={() => router.push('/admin/articles')}>Cancel</Button>
+                <Button type="button" variant="ghost" disabled={isSubmitting} onClick={() => {
+                    form.setValue('status', 'draft');
+                    form.handleSubmit(onSubmit)();
+                }}>
+                    Save Draft
+                </Button>
+                <Button type="submit" disabled={isSubmitting} onClick={() => form.setValue('status', 'published')}>
+                    {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Publishing...</> : 'Publish'}
+                </Button>
+            </footer>
+        </form>
     </Form>
   );
 }
