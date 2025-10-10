@@ -1,27 +1,49 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { type Article } from '@/lib/articles';
+import { type Article } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Skeleton } from './ui/skeleton';
 
 type ArticleCardProps = {
-  article: Article;
+  article: Article | null;
+  isLoading?: boolean;
 };
 
-export default function ArticleCard({ article }: ArticleCardProps) {
+export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
+
+  if (isLoading || !article) {
+    return (
+      <Card className="h-full overflow-hidden">
+        <Skeleton className="aspect-video w-full" />
+        <div className="p-6">
+          <Skeleton className="h-4 w-20 mb-2" />
+          <Skeleton className="h-5 w-full mb-2" />
+          <Skeleton className="h-4 w-4/5" />
+          <div className="mt-4 pt-4">
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+      </Card>
+    )
+  }
+
+  const image = PlaceHolderImages.find((img) => img.id === article.imageId);
+
   return (
     <Card className="group h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
-      {article.imageUrl && (
+      {image && (
         <CardHeader className="p-0">
           <Link href={`/articles/${article.slug}`}>
             <div className="relative aspect-video w-full overflow-hidden">
               <Image
-                src={article.imageUrl}
+                src={image.imageUrl}
                 alt={article.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint={article.imageHint}
+                data-ai-hint={image.imageHint}
               />
             </div>
           </Link>
@@ -35,7 +57,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           <Link href={`/articles/${article.slug}`}>
             <h3 className="font-headline text-lg font-bold group-hover:text-primary">{article.title}</h3>
           </Link>
-          <p className="mt-2 text-sm text-muted-foreground">{article.excerpt}</p>
+          <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{article.excerpt}</p>
         </div>
         <div className="mt-4 pt-4 text-xs text-muted-foreground">
           {article.publishedDate}

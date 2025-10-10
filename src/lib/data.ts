@@ -1,8 +1,6 @@
 
-
 import { type Article, type Stat } from './types';
 
-// This file now contains only static data for stats, as articles are fetched from Firestore.
 const stats: Stat[] = [
   { label: 'Total Demographics', value: 6273, growth: 15.7 },
   { label: 'Total Engagements', value: 17, growth: 55.3 },
@@ -47,7 +45,7 @@ const articles: Article[] = [
     imageId: 'article-3',
     author: 'Hustler Point Editorial',
     publishedDate: 'July 5, 2024',
-    content: 'Artificial Intelligence has moved from sci-fi to a practical tool that can revolutionize your daily workflow. You don\'t need to be a data scientist to leverage its power. Here are five AI tools that can dramatically boost your productivity.\n\n1. ChatGPT/Claude: For brainstorming, writing assistance, and summarizing long documents. 2. Midjourney/DALL-E: For generating unique images for presentations, blog posts, and social media. 3. Notion AI: For organizing your notes, projects, and creating summaries within your workspace. 4. Perplexity AI: A conversational search engine that provides direct answers with sources, saving you from sifting through search results. 5. Fireflies.ai: For automatically transcribing and summarizing your meetings.\n\nBy integrating these tools into your routine, you can offload repetitive tasks and focus on high-impact work that requires your unique human skills. The age of the AI-powered hustler is here.',
+    content: 'Artificial Intelligence has moved from sci-fi to a practical tool that can revolutionize your daily workflow. You don\'t need to be a data scientist to leverage its power. Here are five AI tools that can dramatically boost your productivity.\n\n1. ChatGPT/Claude: For brainstorming, writing assistance, and summarizing long documents.\n2. Midjourney/DALL-E: For generating unique images for presentations, blog posts, and social media.\n3. Notion AI: For organizing your notes, projects, and creating summaries within your workspace.\n4. Perplexity AI: A conversational search engine that provides direct answers with sources, saving you from sifting through search results.\n5. Fireflies.ai: For automatically transcribing and summarizing your meetings.\n\nBy integrating these tools into your routine, you can offload repetitive tasks and focus on high-impact work that requires your unique human skills. The age of the AI-powered hustler is here.',
     featured: false,
     engagement: 98,
     status: 'published',
@@ -76,7 +74,7 @@ const articles: Article[] = [
     author: 'Hustler Point Editorial',
     publishedDate: 'June 20, 2024',
     content: 'For early-stage founders, the pitch deck is the single most important document. It\'s your first impression on potential investors, and it needs to be perfect. But a common mistake is to fill it with dry data and technical jargon. A great pitch deck is not a report; it\'s a story.\n\nYour story should have a clear protagonist (your customer), a villain (the problem they face), and a hero (your solution). Start by clearly articulating the problem. Why is it significant? How are people dealing with it now? Then, introduce your solution and explain why it\'s uniquely positioned to win. Show, don\'t just tell. Use visuals, mockups, and early user testimonials to bring your vision to life.\n\nEnd with a clear ask. How much are you raising, and what will you use it for? A compelling story, backed by solid data on your team, market size, and traction, is the formula for a pitch deck that gets funded.',
-    featured: true,
+    featured: false,
     engagement: 88,
     status: 'published',
   },
@@ -87,8 +85,6 @@ export function getStats(): Stat[] {
   return stats;
 }
 
-// These functions are now deprecated as we fetch articles from Firestore.
-// They are kept here for reference or potential fallback.
 export function getArticles(): Article[] {
   return articles.filter(a => a.status === 'published');
 }

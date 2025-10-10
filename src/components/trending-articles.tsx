@@ -1,32 +1,30 @@
 
 'use client';
-
-import { getArticles } from '@/lib/data';
-import { suggestTrendingArticles } from '@/ai/flows/suggest-trending-articles';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query, where, orderBy, limit } from 'firebase/firestore';
-import { useFirestore, useMemoFirebase } from '@/firebase';
 import { type Article } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
+import { getArticles } from '@/lib/data';
 
 export function TrendingArticles({ currentArticleId }: { currentArticleId?: string }) {
-  const firestore = useFirestore();
-  
-  const articlesQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
-    let q = query(
-        collection(firestore, 'articles'), 
-        where('status', '==', 'published'),
-        orderBy('engagement', 'desc'), 
-        limit(4)
-    );
-    return q;
-  }, [firestore]);
+  const [trendingArticles, setTrendingArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { data: allArticles, isLoading } = useCollection<Article>(articlesQuery);
+  useEffect(() => {
+    const allArticles = getArticles();
+
+    // Simple trending logic: sort by engagement and filter out the current article
+    const sortedArticles = allArticles
+      .sort((a, b) => b.engagement - a.engagement)
+      .filter(a => a.id !== currentArticleId)
+      .slice(0, 3);
+      
+    setTrendingArticles(sortedArticles);
+    setIsLoading(false);
+  }, [currentArticleId]);
+
 
   if (isLoading) {
       return (
@@ -47,19 +45,14 @@ export function TrendingArticles({ currentArticleId }: { currentArticleId?: stri
       );
   }
   
-  if (!allArticles || allArticles.length === 0) {
+  if (!trendingArticles || trendingArticles.length === 0) {
     return (
         <div>
             <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
-            <p className="text-sm text-muted-foreground">No articles available to determine trends.</p>
+            <p className="text-sm text-muted-foreground">No trending articles right now.</p>
         </div>
     );
   }
-
-  // Filter out the current article from the trending list and take the top 3
-  const trendingArticles = allArticles
-    .filter(a => a.id !== currentArticleId)
-    .slice(0, 3);
 
   return (
     <div>
@@ -81,7 +74,7 @@ export function TrendingArticles({ currentArticleId }: { currentArticleId?: stri
                 )}
               </div>
               <div>
-                <p className="text-sm font-semibold leading-tight group-hover:text-primary">{article.title}</p>
+                <p className="text-sm font-semibold leading-tight group-hover:text-primary line-clamp-2">{article.title}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{article.publishedDate}</p>
               </div>
             </Link>

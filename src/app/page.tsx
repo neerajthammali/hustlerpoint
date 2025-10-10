@@ -1,21 +1,35 @@
 
-import { ArrowRight } from 'lucide-react';
+'use client';
+import { ArrowRight, Feather } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { getAllArticles } from '@/lib/articles';
+import { getArticles, getEditorsPicks } from '@/lib/data';
 import ArticleCard from '@/components/article-card';
+import { ArticleCarousel } from '@/components/article-carousel';
+import { type Article } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-export default async function Home() {
-  const allArticles = await getAllArticles();
-  const featuredArticles = allArticles.filter(article => article.featured).slice(0, 3);
+export default function Home() {
+  const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
+  const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate fetching data
+    const allArticles = getArticles();
+    const picks = getEditorsPicks();
+    
+    // get featured articles that are not editor's picks
+    const featured = allArticles.filter(article => article.featured && !picks.find(p => p.id === article.id));
+
+    setFeaturedArticles(featured);
+    setEditorsPicks(picks);
+    setIsLoading(false);
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="flex flex-col items-center justify-center space-y-6 text-center">
-        <Badge variant="outline" className="py-2 px-4 text-sm">
-          Where Insight Meets Impact
-        </Badge>
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Hustler's Point
         </h1>
@@ -23,34 +37,44 @@ export default async function Home() {
           Your source for sharp, actionable insights into tech, creativity, and startup culture. We provide practical guides to help you navigate the digital world, build your brand, and turn your ideas into reality.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
-            <Button asChild size="lg">
-                <Link href="/articles">
-                    Read Articles <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-                <Link href="/about">About Us</Link>
-            </Button>
+          <Button asChild size="lg">
+            <Link href="/articles">
+              Read Articles <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link href="/about">About Us</Link>
+          </Button>
         </div>
       </div>
 
       <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Featured Articles</h2>
+        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Editor's Picks</h2>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
-          Dive into our latest insights and stories from the world of tech, creators, and startup culture.
+          Hand-picked articles from our editors to get you started.
         </p>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredArticles.map(article => (
-            <ArticleCard key={article.slug} article={article} />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, i) => <ArticleCard key={i} article={null} isLoading={true}/>)
+          ) : (
+            editorsPicks.map(article => (
+              <ArticleCard key={article.id} article={article} />
+            ))
+          )}
         </div>
-        <Button asChild variant="outline" className="mt-8">
-          <Link href="/articles">
-            View All Articles <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
       </section>
 
+      <section className="mt-24">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Featured Articles</h2>
+          <Button asChild variant="outline">
+            <Link href="/articles">
+              View All <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+        <ArticleCarousel articles={featuredArticles} isLoading={isLoading} />
+      </section>
     </div>
   );
 }
