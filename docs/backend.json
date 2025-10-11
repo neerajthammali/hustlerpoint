@@ -1,204 +1,226 @@
-
 {
   "entities": {
-    "Article": {
-      "title": "Article",
+    "Comment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Comment",
       "type": "object",
-      "description": "Represents a blog article.",
+      "description": "Represents a user comment on an article.",
       "properties": {
-        "title": {
+        "id": {
           "type": "string",
-          "description": "Title of the article."
+          "description": "Unique identifier for the Comment entity."
+        },
+        "articleId": {
+          "type": "string",
+          "description": "Reference to the Article this comment belongs to. (Relationship: Article 1:N Comment)"
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Reference to the User who wrote the comment. (Relationship: User 1:N Comment)"
         },
         "content": {
-          "type": "object",
-          "description": "The full content of the article in Editor.js format."
-        },
-        "author": {
           "type": "string",
-          "description": "Author of the article."
-        },
-        "category": {
-          "type": "string",
-          "description": "The category of the article."
-        },
-        "slug": {
-          "type": "string",
-          "description": "URL-friendly slug for the article."
-        },
-        "keywords": {
-          "type": "string",
-          "description": "Comma-separated keywords for SEO."
-        },
-        "metaDescription": {
-          "type": "string",
-          "description": "Meta description for SEO."
-        },
-        "canonicalUrl": {
-          "type": "string",
-          "description": "Canonical URL if the content is republished."
-        },
-        "publishedDate": {
-          "type": "string",
-          "format": "date-time",
-          "description": "The date the article was published."
-        },
-        "publishedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The date the article was published."
+          "description": "The text content of the comment."
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of when the article was created."
+          "description": "The date and time when the comment was created.",
+          "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of when the article was last updated."
-        },
-        "status": {
-          "type": "string",
-          "enum": ["draft", "published", "scheduled"],
-          "description": "The publishing status of the article."
-        },
-        "featured": {
-          "type": "boolean",
-          "description": "Whether the article is a featured post."
-        },
-        "imageId": {
-          "type": "string",
-          "description": "ID for the placeholder image."
-        },
-        "engagement": {
-            "type": "number",
-            "description": "Metric for user engagement."
-        },
-        "excerpt": {
-            "type": "string",
-            "description": "A short summary of the article."
+          "description": "The date and time when the comment was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
-        "title",
+        "id",
+        "articleId",
+        "authorId",
         "content",
-        "slug",
-        "author",
-        "category",
-        "status",
-        "publishedDate",
-        "createdAt",
-        "updatedAt"
+        "createdAt"
+      ]
+    },
+    "Article": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Article",
+      "type": "object",
+      "description": "Represents an article on the Hustler Point Hub platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Article entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the article."
+        },
+        "contentLink": {
+          "type": "string",
+          "description": "Link to the article's content, stored in Google Sheets/Excel.",
+          "format": "uri"
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Reference to the User who authored the article. (Relationship: User 1:N Article)"
+        },
+        "categoryId": {
+          "type": "string",
+          "description": "Reference to the Category the article belongs to. (Relationship: Category 1:N Article)"
+        },
+        "publishedAt": {
+          "type": "string",
+          "description": "The date and time when the article was published.",
+          "format": "date-time"
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "URL to the article's thumbnail image.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "contentLink",
+        "authorId",
+        "categoryId",
+        "publishedAt",
+        "thumbnailUrl"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Hustler Point Hub platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short biography of the user."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "displayName"
       ]
     },
     "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
       "description": "Represents a category for articles.",
       "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Category entity."
+        },
         "name": {
           "type": "string",
-          "description": "Name of the category."
+          "description": "The name of the category."
         },
         "description": {
           "type": "string",
-          "description": "Description of the category."
+          "description": "A description of the category."
         }
       },
       "required": [
+        "id",
         "name"
       ]
-    },
-    "NewsletterSubscriber": {
-      "title": "NewsletterSubscriber",
-      "type": "object",
-      "description": "Represents a newsletter subscriber.",
-      "properties": {
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Email address of the subscriber."
-        },
-        "subscriptionDate": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Date and time the user subscribed."
-        }
-      },
-      "required": [
-        "email",
-        "subscriptionDate"
-      ]
-    },
-    "Admin": {
-      "title": "Admin",
-      "type": "object",
-      "description": "Represents an admin user.",
-      "properties": {
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Email address of the admin."
-        }
-      },
-      "required": [
-        "email"
-      ]
-    },
-    "Settings": {
-      "title": "Settings",
-      "type": "object",
-      "description": "Represents the publication settings.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The name of the publication."
-        },
-        "description": {
-          "type": "string",
-          "description": "A short description of the publication."
-        }
-      },
-      "required": ["name", "description"]
     }
   },
   "auth": {
     "providers": [
-      "password"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
-    "/articles/{articleId}": {
-      "schema": {
-        "$ref": "#/entities/Article"
+    "structure": [
+      {
+        "path": "articles/{articleId}",
+        "definition": {
+          "entityName": "Article",
+          "schema": {
+            "$ref": "#/backend/entities/Article"
+          },
+          "description": "Stores article data. Root collection.",
+          "params": [
+            {
+              "name": "articleId",
+              "description": "Unique identifier for the article."
+            }
+          ]
+        }
       },
-      "description": "Stores all blog articles. Each document is an article."
-    },
-    "/categories/{categoryId}": {
-      "schema": {
-        "$ref": "#/entities/Category"
+      {
+        "path": "articles/{articleId}/comments/{commentId}",
+        "definition": {
+          "entityName": "Comment",
+          "schema": {
+            "$ref": "#/backend/entities/Comment"
+          },
+          "description": "Stores comments related to a specific article. Subcollection of articles. Includes denormalized fields if needed for authorization (e.g., if comment visibility depends on the article's status).",
+          "params": [
+            {
+              "name": "articleId",
+              "description": "Unique identifier for the article."
+            },
+            {
+              "name": "commentId",
+              "description": "Unique identifier for the comment."
+            }
+          ]
+        }
       },
-      "description": "Stores article categories."
-    },
-    "/newsletter_subscribers/{subscriberId}": {
-      "schema": {
-        "$ref": "#/entities/NewsletterSubscriber"
+      {
+        "path": "users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user data. Root collection.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user."
+            }
+          ]
+        }
       },
-      "description": "Stores newsletter subscribers."
-    },
-    "/admins/{userId}": {
-      "schema": {
-        "$ref": "#/entities/Admin"
-      },
-      "description": "Stores admin users. The document ID is the user's UID."
-    },
-    "/settings/{settingsId}": {
-        "schema": {
-            "$ref": "#/entities/Settings"
-        },
-        "description": "Stores publication settings as a singleton document (e.g., ID 'main')."
-    }
+      {
+        "path": "categories/{categoryId}",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Stores article categories. Root collection.",
+          "params": [
+            {
+              "name": "categoryId",
+              "description": "Unique identifier for the category."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to store comments on articles. The primary collections are `articles` and `users`. Comments are stored in a subcollection under each article (`articles/{articleId}/comments/{commentId}`). This structure allows for efficient retrieval of comments for a specific article.  Authorization Independence is achieved through path-based ownership. The structure enables secure `list` operations by restricting access to comments based on the article they belong to and the authenticated user's permissions (which would need to be implemented in security rules, e.g. only allowing read access to comments on published articles)."
   }
 }
-
