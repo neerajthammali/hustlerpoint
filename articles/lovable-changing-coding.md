@@ -13,6 +13,7 @@ image_alt: "Lovable logo banner"
 read_time: "5 min read"
 status: "published"
 language: "en"
+featured: true
 ---
 
 # Lovable: A Brand Changing How the World Codes
