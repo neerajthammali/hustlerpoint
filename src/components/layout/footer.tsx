@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -11,7 +12,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
   { href: "/about", label: "About" },
-  { href: "mailto:neerajthammali@gmail.com", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const legalLinks = [
@@ -53,13 +54,9 @@ export function Footer() {
               <ul className="mt-4 space-y-2">
                 {navLinks.map((link) => (
                     <li key={link.label}>
-                      {link.label === 'Contact' ? (
-                        <a href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">{link.label}</a>
-                      ) : (
                         <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                           {link.label}
                         </Link>
-                      )}
                     </li>
                 ))}
               </ul>
@@ -109,3 +106,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

@@ -14,7 +14,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
   { href: "/about", label: "About" },
-  { href: "mailto:neerajthammali@gmail.com", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -42,9 +42,6 @@ export function Header() {
                   <Logo />
                 </div>
                 {navLinks.map((link) => (
-                   link.label === 'Contact' ? (
-                    <a key={link.href} href={link.href} className="rounded-md px-4 py-2 text-lg font-medium transition-colors hover:bg-accent">{link.label}</a>
-                ) : (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -53,7 +50,6 @@ export function Header() {
                   >
                     {link.label}
                   </Link>
-                )
                 ))}
               </div>
             </SheetContent>
@@ -69,17 +65,13 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
           {navLinks.map((link) => (
-             link.label === 'Contact' ? (
-                <a key={link.href} href={link.href} className="transition-colors hover:text-foreground/80 text-foreground/60">{link.label}</a>
-             ) : (
-                <Link
-                key={link.href}
-                href={link.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                {link.label}
-                </Link>
-             )
+            <Link
+            key={link.href}
+            href={link.href}
+            className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+            {link.label}
+            </Link>
           ))}
         </nav>
 
@@ -90,3 +82,5 @@ export function Header() {
     </header>
   );
 }
+
+    
