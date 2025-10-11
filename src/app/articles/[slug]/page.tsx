@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { getArticleBySlug, getAllArticles } from '@/lib/articles';
 import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
-import Comments from '@/components/comments';
+import CommentsWrapper from '@/components/comments-wrapper';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -170,7 +170,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
           </article>
           <Separator className="my-8" />
-          <Comments articleId={article.slug} />
+          <CommentsWrapper />
         </div>
 
         {/* Sidebar */}
