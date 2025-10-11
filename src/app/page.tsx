@@ -39,7 +39,7 @@ export default async function Home() {
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Publish Your Ideas. Build Your Future.
         </h1>
-        <p className="max-w-[700px] text-muted-foreground md:text-xl">
+        <p className="max-w-[700px] text-foreground/80 md:text-xl">
           Hustler Point is a creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
