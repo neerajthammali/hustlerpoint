@@ -1,26 +1,41 @@
+import { SitemapStream, streamToPromise } from 'sitemap';
+import { createWriteStream } from 'fs';
+import path from 'path';
 
-import sitemap from '../sitemap';
+// Your live site URL
+const siteUrl = 'https://hustlerspoint.vercel.app';
 
-export const revalidate = 60 * 60 * 24; // 24 hours
+// List of all key pages (add/edit anytime)
+const pages = [
+  '',               // homepage
+  'about',
+  'contact',
+  'blog',
+  'services',
+  'privacy-policy',
+];
 
-export async function GET() {
-    const sitemapContent = await sitemap();
-    
-    const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${sitemapContent.map(item => `
-    <url>
-      <loc>${item.url}</loc>
-      <lastmod>${item.lastModified}</lastmod>
-      <changefreq>${item.changeFrequency}</changefreq>
-      <priority>${item.priority}</priority>
-    </url>
-  `).join('')}
-</urlset>`;
+async function generate() {
+  const sitemap = new SitemapStream({ hostname: siteUrl });
 
-    return new Response(sitemapXml, {
-        headers: {
-            'Content-Type': 'application/xml',
-        },
+  pages.forEach((page) => {
+    sitemap.write({
+      url: `/${page}`,
+      changefreq: 'weekly',
+      priority: page === '' ? 1.0 : 0.8,
     });
+  });
+
+  sitemap.end();
+
+  const xml = await streamToPromise(sitemap);
+  const filePath = path.resolve('./public/sitemap.xml');
+
+  createWriteStream(filePath).write(xml);
+  console.log('✅  Sitemap generated at public/sitemap.xml');
 }
+
+generate().catch((err) => {
+  console.error('❌  Error generating sitemap:', err);
+  process.exit(1);
+});
