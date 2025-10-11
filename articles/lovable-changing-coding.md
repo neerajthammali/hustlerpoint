@@ -8,7 +8,7 @@ date: "2025-10-11"
 modified_date: "2025-10-11"
 category: "Tech & AI"
 tags: ["AI", "Coding", "Startup", "Innovation"]
-image_id: "lovable-banner"
+image_id: "lol.webp"
 read_time: "5 min read"
 status: "published"
 language: "en"
