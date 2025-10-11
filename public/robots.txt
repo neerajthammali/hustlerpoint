@@ -4,4 +4,4 @@ Disallow: /nogooglebot/
 User-agent: *
 Allow: /
 
-Sitemap: https://www.hustlerpoint.vercel.app/sitemap.xml
+Sitemap: https://www.hustlerspoint.vercel.app/sitemap.xml
