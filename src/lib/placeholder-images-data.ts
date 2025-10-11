@@ -1,4 +1,5 @@
-{
+
+export const placeholderImagesData = {
   "placeholderImages": [
     {
       "id": "article-1",
@@ -29,6 +30,12 @@
       "description": "A founder pitching their startup idea.",
       "imageUrl": "https://picsum.photos/seed/5/1200/800",
       "imageHint": "startup pitch"
+    },
+    {
+      "id": "article-6",
+      "description": "Example of a custom article image.",
+      "imageUrl": "/new-article-image.jpg",
+      "imageHint": "custom example"
     }
   ]
 }
