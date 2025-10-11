@@ -1,51 +1,41 @@
+import { SitemapStream, streamToPromise } from 'sitemap';
+import { createWriteStream } from 'fs';
+import path from 'path';
 
-import { MetadataRoute } from 'next';
-import { getAllArticles } from '@/lib/articles';
+// Your live site URL
+const siteUrl = 'https://hustlerspoint.vercel.app';
 
-const URL = 'https://www.hustlerspoint.vercel.app'; // Replace with your domain
+// List of all key pages (add/edit anytime)
+const pages = [
+  '',               // homepage
+  'about',
+  'contact',
+  'blog',
+  'services',
+  'privacy-policy',
+];
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const articles = await getAllArticles();
+async function generate() {
+  const sitemap = new SitemapStream({ hostname: siteUrl });
 
-  const articleEntries: MetadataRoute.Sitemap = articles.map(({ slug, publishedDate }) => ({
-    url: `${URL}/articles/${slug}`,
-    lastModified: new Date(publishedDate).toISOString(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  pages.forEach((page) => {
+    sitemap.write({
+      url: `/${page}`,
+      changefreq: 'weekly',
+      priority: page === '' ? 1.0 : 0.8,
+    });
+  });
 
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: `${URL}/`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${URL}/about`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${URL}/ideas`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${URL}/contact`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
-     {
-      url: `${URL}/articles`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-  ];
+  sitemap.end();
 
-  return [...staticPages, ...articleEntries];
+  const xml = await streamToPromise(sitemap);
+  const filePath = path.resolve('./public/sitemap.xml');
+
+  createWriteStream(filePath).write(xml);
+  console.log('✅  Sitemap generated at public/sitemap.xml');
 }
+
+generate().catch((err) => {
+  console.error('❌  Error generating sitemap:', err);
+  process.exit(1);
+});
