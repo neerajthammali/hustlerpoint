@@ -1,10 +1,11 @@
-
 'use server';
 
 import { type Article } from './types';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { remark } from 'remark';
+import html from 'remark-html';
 
 const articlesDirectory = path.join(process.cwd(), 'src/articles');
 
@@ -20,7 +21,12 @@ export async function getAllArticles(): Promise<Article[]> {
         // This is a hack to give a somewhat unique ID and engagement score
         // In a real app, this would come from a database.
         const engagement = frontmatter.title.length * 10 % 100;
-        const imageId = `article-${(engagement % 5) + 1}`;
+        
+        let imageId = `article-${(engagement % 5) + 1}`;
+        if (slug.includes('ai-tools')) {
+          imageId = 'article-3'; // ai-tools slug
+        }
+
 
         return {
             slug,
@@ -37,5 +43,17 @@ export async function getAllArticles(): Promise<Article[]> {
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
     const articles = await getAllArticles();
-    return articles.find(article => article.slug === slug);
+    const article = articles.find(article => article.slug === slug);
+    if (!article) {
+        return undefined;
+    }
+    const processedContent = await remark()
+        .use(html)
+        .process(article.content);
+    const contentHtml = processedContent.toString();
+
+    return {
+        ...article,
+        content: contentHtml,
+    };
 }

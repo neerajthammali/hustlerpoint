@@ -38,6 +38,11 @@
           "type": "string",
           "description": "Canonical URL if the content is republished."
         },
+        "publishedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the article was published."
+        },
         "createdAt": {
           "type": "string",
           "format": "date-time",
@@ -77,6 +82,7 @@
         "author",
         "category",
         "status",
+        "publishedDate",
         "createdAt",
         "updatedAt"
       ]

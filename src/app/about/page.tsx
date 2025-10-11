@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import { Linkedin, BookOpen, BrainCircuit, Users, Mail, Lightbulb, Link as LinkIcon } from 'lucide-react';
 import Link from 'next/link';

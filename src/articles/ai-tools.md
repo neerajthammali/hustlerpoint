@@ -5,8 +5,6 @@ category: 'Tech'
 author: 'Hustler Point Editorial'
 publishedDate: 'July 5, 2024'
 featured: false
-imageUrl: 'https://picsum.photos/seed/3/1200/800'
-imageHint: 'artificial intelligence'
 ---
 
 Artificial Intelligence has moved from sci-fi to a practical tool that can revolutionize your daily workflow. You don't need to be a data scientist to leverage its power. Here are five AI tools that can dramatically boost your productivity.

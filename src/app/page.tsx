@@ -36,7 +36,7 @@ export default function Home() {
       setIsLoading(true);
       const allArticles = await getAllArticles();
       
-      const editorsPicksSlugs = ['the-art-of-the-pitch-deck', 'ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
+      const editorsPicksSlugs = ['the-art-of-the-pitch-deck', '5-ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
       const picks = allArticles.filter(article => editorsPicksSlugs.includes(article.slug));
 
       setEditorsPicks(picks);

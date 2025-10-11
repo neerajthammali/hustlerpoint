@@ -16,6 +16,4 @@ export interface Article {
   publishedDate: string;
   content: string;
   engagement: number;
-  publishedAt: string;
 }
-
