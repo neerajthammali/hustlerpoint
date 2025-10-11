@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
 } from './ui/card';
 import { MessageSquare, Send } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useCollection, useFirebase, useFirestore } from '@/firebase';
+import { useCollection, useFirebase, useFirestore, useMemoFirebase } from '@/firebase';
 import {
   addDocumentNonBlocking,
 } from '@/firebase';
@@ -40,7 +40,7 @@ export default function Comments({ articleId }: { articleId: string }) {
   const firestore = useFirestore();
   const [commentText, setCommentText] = useState('');
 
-  const commentsQuery = useMemo(() => {
+  const commentsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
     return query(
       collection(firestore, 'comments', articleId, 'messages'),
