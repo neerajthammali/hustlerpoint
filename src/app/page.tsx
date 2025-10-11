@@ -7,41 +7,26 @@ import { DiscordIcon, WhatsAppIcon } from '@/components/community-icons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ArticleList from '@/components/article-list';
-
-
-const stats = [
-  { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" /> },
-  { label: 'Ideas Shared', value: 85, icon: <Lightbulb className="h-8 w-8 text-primary" /> },
-  { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" /> },
-];
+import placeholderImages from '@/lib/placeholder-images.json';
 
 const testimonials = [
   {
     quote: "Hustler's Point is my go-to for no-fluff, actionable advice. The case studies on startup growth have been a game-changer for my own venture.",
     author: "Alex Johnson",
     title: "SaaS Founder",
-    avatar: {
-      url: "https://picsum.photos/seed/test1/40/40",
-      hint: "person avatar"
-    },
+    avatar: placeholderImages['testimonial-1'],
   },
   {
     quote: "The community is incredible. Being able to connect with other founders who are facing the same challenges is invaluable. It's like a mastermind group in my pocket.",
     author: "Samantha Lee",
     title: "Early-Stage Entrepreneur",
-    avatar: {
-      url: "https://picsum.photos/seed/test2/40/40",
-      hint: "person avatar"
-    },
+    avatar: placeholderImages['testimonial-2'],
   },
   {
     quote: "The breakdowns of how successful companies solved real-world problems are pure gold. It's inspiring and gives me tangible ideas to apply to my own business.",
     author: "David Chen",
     title: "Bootstrapped Founder",
-    avatar: {
-      url: "https://picsum.photos/seed/test3/40/40",
-      hint: "person avatar"
-    },
+    avatar: placeholderImages['testimonial-3'],
   },
 ];
 
@@ -49,12 +34,18 @@ export default async function Home() {
   const allArticles = await getAllArticles();
   
   const editorsPicks = allArticles.filter(a => a.featured).slice(0, 3);
+  
+  const stats = [
+    { label: 'Articles Published', value: allArticles.length, icon: <BookOpen className="h-8 w-8 text-primary" /> },
+    { label: 'Ideas Shared', value: 85, icon: <Lightbulb className="h-8 w-8 text-primary" /> },
+    { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" /> },
+  ];
 
   return (
     <div className="flex flex-col">
       <div className="relative isolate overflow-hidden bg-background">
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px]"></div>
-          <div className="container mx-auto px-4 py-20 sm:py-28">
+          <div className="container mx-auto px-4 py-12">
             <div className="max-w-2xl text-center mx-auto">
               <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">Publish Your Ideas. Build Your Future.</h1>
               <p className="mt-6 text-lg leading-8 text-foreground/80">
@@ -74,7 +65,7 @@ export default async function Home() {
           </div>
       </div>
       
-      <section className="bg-card py-12 sm:py-16">
+      <section className="bg-card py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-5xl">
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 text-center md:grid-cols-3">
@@ -92,7 +83,7 @@ export default async function Home() {
         </div>
       </section>
       
-      <section className="py-20 sm:py-28">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Editor's Picks</h2>
@@ -100,11 +91,15 @@ export default async function Home() {
               Hand-picked articles from our editors to get you started.
             </p>
           </div>
-          <div className="mt-12">
-            <ArticleList articles={editorsPicks} />
+          <div className="mt-10">
+             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+                {editorsPicks.map((article) => (
+                  <ArticleList key={article.slug} articles={[article]} />
+                ))}
+            </div>
           </div>
           {editorsPicks.length > 0 && (
-              <div className="mt-12 text-center">
+              <div className="mt-10 text-center">
                 <Button asChild size="lg" variant="outline">
                   <Link href="/articles">
                     View All Articles
@@ -115,7 +110,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-card py-20 sm:py-28">
+      <section className="bg-card py-16">
         <div className="container mx-auto px-4">
             <div className="text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What They're Saying</h2>
@@ -123,7 +118,7 @@ export default async function Home() {
                 Testimonials from our readers and community members.
                 </p>
             </div>
-             <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+             <div className="mx-auto mt-10 grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
               {testimonials.map((testimonial, index) => (
                 <Card key={index} className="flex h-full flex-col justify-between text-left">
                   <CardContent className="p-6">
@@ -131,7 +126,7 @@ export default async function Home() {
                   </CardContent>
                   <div className="flex items-center gap-4 border-t bg-card/50 p-6">
                     <Avatar>
-                      <AvatarImage src={testimonial.avatar.url} alt={testimonial.author} data-ai-hint={testimonial.avatar.hint} />
+                      <AvatarImage src={testimonial.avatar.url} alt={testimonial.author} data-ai-hint={testimonial.avatar.hint} width={testimonial.avatar.width} height={testimonial.avatar.height} />
                       <AvatarFallback>{testimonial.author.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -145,7 +140,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-16">
         <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Join the Community</h2>
