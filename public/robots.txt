@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.hustlerpoint.xyz/sitemap.xml
+Sitemap: https://www.hustlerpoint.vercel.app/sitemap.xml
