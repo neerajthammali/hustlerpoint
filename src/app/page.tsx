@@ -7,6 +7,7 @@ import { TestimonialsCarousel } from '@/components/testimonials';
 import { ArticleCarousel } from '@/components/article-carousel';
 import AnimatedCounter from '@/components/animated-counter';
 import { DiscordIcon, WhatsAppIcon } from '@/components/community-icons';
+import AnimatedHeadline from '@/components/animated-headline';
 
 const stats = [
   { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
@@ -25,9 +26,7 @@ export default async function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px]"></div>
           <div className="container mx-auto px-4 py-24 sm:py-32">
             <div className="max-w-2xl text-center mx-auto">
-              <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                Publish Your Ideas. Build Your Future.
-              </h1>
+              <AnimatedHeadline text="Publish Your Ideas. Build Your Future." />
               <p className="mt-6 text-lg leading-8 text-foreground/80">
                 A creator platform for writers, founders, and learners to share powerful insights and grow an audience.
               </p>
