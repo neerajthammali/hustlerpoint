@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter, Poppins } from 'next/font/google';
+import Script from 'next/script';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -66,6 +67,7 @@ export default function RootLayout({
             <Footer />
             <Toaster />
           </div>
+          <Script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer />
       </body>
     </html>
   );

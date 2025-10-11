@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -9,38 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { MessageSquare, Send } from 'lucide-react';
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import { MessageSquare } from 'lucide-react';
 
 export default function Comments({ articleId }: { articleId: string }) {
-  const recipientEmail = 'heyladdu1206@gmail.com';
-
-  const handleCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const name = formData.get('name') as string;
-    const comment = formData.get('comment') as string;
-
-    const subject = `New Comment on Article: ${articleId}`;
-    const body = `
-      A new comment has been submitted for the article "${articleId}".
-
-      **From:**
-      ${name}
-
-      ---
-
-      **Comment:**
-      ${comment}
-    `;
-
-    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
-    event.currentTarget.reset();
-  };
 
   return (
     <Card>
@@ -50,30 +21,11 @@ export default function Comments({ articleId }: { articleId: string }) {
           Leave a Comment
         </CardTitle>
         <CardDescription>
-          Your comment will be sent to the author.
+          Share your thoughts and join the discussion.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleCommentSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" name="name" placeholder="Your name" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="comment">Comment</Label>
-            <Textarea
-              id="comment"
-              name="comment"
-              placeholder="Write a comment..."
-              className="min-h-[100px]"
-              required
-            />
-          </div>
-          <Button type="submit">
-            <Send className="mr-2 h-4 w-4" />
-            Post Comment
-          </Button>
-        </form>
+        <div className="commonninja_component pid-efcf4410-ff0f-4aa1-b513-1a29066d31fc"></div>
       </CardContent>
     </Card>
   );
