@@ -5,11 +5,14 @@ import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
+import Script from 'next/script';
 
 
 export const metadata: Metadata = {
   title: 'Hustler Point - Publish, Grow, and Monetize Your Ideas',
   description: 'A creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.',
+  // Add metadataBase for absolute URLs in sitemap
+  metadataBase: new URL('https://www.hustlerpoint.xyz'), // Replace with your actual domain
 };
 
 export default function RootLayout({
@@ -23,8 +26,18 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet" />
+        
+        {/* Add Google Search Console verification tag (replace content with your specific code) */}
+        <meta name="google-site-verification" content="YOUR_GOOGLE_SITE_VERIFICATION_CODE" />
       </head>
       <body className={cn('font-body antialiased')}>
+        {/* Add Google AdSense script (replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID) */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <div className="relative flex min-h-dvh flex-col bg-background">
           <Header />
           <main className="flex-1">{children}</main>
