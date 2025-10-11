@@ -9,7 +9,7 @@ import AnimatedCounter from '@/components/animated-counter';
 
 const stats = [
   { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
-  { label: 'Ideas Shared', value: 850, icon: <Lightbulb className="h-8 w-8 text-primary" />, growth: 20 },
+  { label: 'Ideas Shared', value: 85, icon: <Lightbulb className="h-8 w-8 text-primary" />, growth: 20 },
   { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" />, growth: 10 },
 ];
 
