@@ -1,72 +1,41 @@
 
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Mail, Send, MessageSquare } from 'lucide-react';
 
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email.' }),
-  subject: z.string().min(5, { message: 'Subject must be at least 5 characters.' }),
-  message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
-});
-
-const testimonialFormSchema = z.object({
-    name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-    title: z.string().min(2, { message: 'Title/Role must be at least 2 characters.' }),
-    testimonial: z.string().min(20, { message: 'Testimonial must be at least 20 characters.' }),
-    permission: z.boolean().default(false).refine(val => val === true, { message: 'You must grant permission to feature your testimonial.' }),
-});
-
 export default function ContactPage() {
-  const { toast } = useToast();
+  const recipientEmail = "neerajthammali2021@gmail.com";
 
-  const contactForm = useForm<z.infer<typeof contactFormSchema>>({
-    resolver: zodResolver(contactFormSchema),
-    defaultValues: { name: '', email: '', subject: '', message: '' },
-  });
+  const handleContactSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const subject = formData.get('subject') as string;
+    const message = formData.get('message') as string;
 
-  const testimonialForm = useForm<z.infer<typeof testimonialFormSchema>>({
-    resolver: zodResolver(testimonialFormSchema),
-    defaultValues: { name: '', title: '', testimonial: '', permission: false },
-  });
-
-
-  function onContactSubmit(values: z.infer<typeof contactFormSchema>) {
-    console.log(values);
-    toast({
-      title: 'Message Sent!',
-      description: 'Thanks for reaching out. We will get back to you shortly.',
-    });
-    contactForm.reset();
-  }
+    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+    window.location.href = mailtoLink;
+  };
   
-  function onTestimonialSubmit(values: z.infer<typeof testimonialFormSchema>) {
-    console.log(values);
-    toast({
-      title: 'Testimonial Submitted!',
-      description: 'Thank you for your valuable feedback!',
-    });
-    testimonialForm.reset();
-  }
+  const handleTestimonialSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name') as string;
+    const title = formData.get('title') as string;
+    const testimonial = formData.get('testimonial') as string;
+
+    const subject = `New Testimonial from ${name}`;
+    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nTitle/Role: ${title}\n\nTestimonial:\n${testimonial}`)}`;
+    window.location.href = mailtoLink;
+  };
+
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-20">
@@ -88,65 +57,27 @@ export default function ContactPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...contactForm}>
-              <form onSubmit={contactForm.handleSubmit(onContactSubmit)} className="space-y-8">
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <FormField
-                    control={contactForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John Doe" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={contactForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="you@example.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            <form onSubmit={handleContactSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="contact-name">Full Name</Label>
+                  <Input id="contact-name" name="name" placeholder="John Doe" required />
                 </div>
-                <FormField
-                  control={contactForm.control}
-                  name="subject"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Subject</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Partnership Inquiry" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={contactForm.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Tell us what's on your mind..." className="min-h-[120px]" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Send Message</Button>
-              </form>
-            </Form>
+                <div className="space-y-2">
+                  <Label htmlFor="contact-email">Email Address</Label>
+                  <Input id="contact-email" name="email" type="email" placeholder="you@example.com" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="contact-subject">Subject</Label>
+                <Input id="contact-subject" name="subject" placeholder="e.g., Partnership Inquiry" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="contact-message">Message</Label>
+                <Textarea id="contact-message" name="message" placeholder="Tell us what's on your mind..." className="min-h-[120px]" required />
+              </div>
+              <Button type="submit">Send Message</Button>
+            </form>
           </CardContent>
         </Card>
         
@@ -163,81 +94,27 @@ export default function ContactPage() {
              </p>
           </CardHeader>
           <CardContent>
-             <Form {...testimonialForm}>
-              <form onSubmit={testimonialForm.handleSubmit(onTestimonialSubmit)} className="space-y-8">
+             <form onSubmit={handleTestimonialSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                   <FormField
-                    control={testimonialForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Your Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Alex Johnson" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                   <FormField
-                    control={testimonialForm.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Your Title/Role</FormLabel>
-                        <FormControl>
-                          <Input placeholder="SaaS Founder" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                   <div className="space-y-2">
+                     <Label htmlFor="testimonial-name">Your Name</Label>
+                     <Input id="testimonial-name" name="name" placeholder="Alex Johnson" required />
+                   </div>
+                   <div className="space-y-2">
+                      <Label htmlFor="testimonial-title">Your Title/Role</Label>
+                      <Input id="testimonial-title" name="title" placeholder="SaaS Founder" required />
+                   </div>
                 </div>
 
-                 <FormField
-                  control={testimonialForm.control}
-                  name="testimonial"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Testimonial</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Hustler Point has been a game-changer..." className="min-h-[120px]" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                    control={testimonialForm.control}
-                    name="permission"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                                <FormLabel>
-                                I agree to have my testimonial featured on Hustler Point.
-                                </FormLabel>
-                                <FormDescription>
-                                By checking this box, you grant us permission to use your feedback publicly.
-                                </FormDescription>
-                                <FormMessage />
-                            </div>
-                        </FormItem>
-                    )}
-                />
+                 <div className="space-y-2">
+                   <Label htmlFor="testimonial-text">Testimonial</Label>
+                   <Textarea id="testimonial-text" name="testimonial" placeholder="Hustler Point has been a game-changer..." className="min-h-[120px]" required />
+                 </div>
                 <Button type="submit">Submit Testimonial</Button>
               </form>
-            </Form>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-
-    
