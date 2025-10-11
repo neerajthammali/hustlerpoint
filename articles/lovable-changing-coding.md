@@ -8,10 +8,11 @@ date: "2025-10-11"
 modified_date: "2025-10-11"
 category: "Tech & AI"
 tags: ["AI", "Coding", "Startup", "Innovation"]
-image_id: "lol"
+image_id: "lovable-banner"
 read_time: "5 min read"
 status: "published"
 language: "en"
+thumbnail: "/images/lovable-banner.jpg"
 featured: true
 ---
 
