@@ -79,7 +79,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </article>
           <Separator className="my-12" />
-          <Comments />
+          <Comments articleId={article.slug} />
         </div>
 
         {/* Sidebar */}
