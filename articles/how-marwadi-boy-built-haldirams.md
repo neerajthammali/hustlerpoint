@@ -6,7 +6,7 @@ author: "Neeraj Kumar"
 publisher: "Hustlers Point"
 date: "2025-10-11"
 modified_date: "2025-10-11"
-category: "Business & Inspiration"
+category: "Brands & Inspiration"
 tags: ["Entrepreneurship", "India", "Business Story", "Startup", "Haldiram"]
 image_id: "haldiram-banner"
 read_time: "6 min read"
