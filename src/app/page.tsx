@@ -149,13 +149,13 @@ export default async function Home() {
                 </p>
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button asChild size="lg" className="w-full sm:w-auto">
-                        <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
+                        <a href="https://discord.gg/hustlerpoint" target="_blank" rel="noopener noreferrer">
                             <DiscordIcon className="mr-2 h-5 w-5" />
                             Join Discord
                         </a>
                     </Button>
                     <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-                        <a href="https://chat.whatsapp.com/your-invite" target="_blank" rel="noopener noreferrer">
+                        <a href="https://chat.whatsapp.com/FUTfdqsELWoKLMRuDGnz0Y?mode=ems_copy_t" target="_blank" rel="noopener noreferrer">
                             <WhatsAppIcon className="mr-2 h-5 w-5" />
                             Join WhatsApp
                         </a>
