@@ -1,14 +1,14 @@
 
 import Image from 'next/image';
-import { Linkedin, BookOpen, BrainCircuit, Users } from 'lucide-react';
+import { Linkedin, BookOpen, BrainCircuit, Users, Mail, Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const whatWeDo = [
-  { icon: <BookOpen className="h-6 w-6 text-primary" />, title: 'Smart Publishing', description: 'A clean, modern editor to share your ideas, stories, and insights.' },
-  { icon: <BrainCircuit className="h-6 w-6 text-primary" />, title: 'AI-Powered Tools', description: 'Leverage AI for SEO automation, content suggestions, and growth analytics.' },
-  { icon: <Users className="h-6 w-6 text-primary" />, title: 'Community & Growth', description: 'Connect with fellow creators and access resources to build your audience.' },
+  { icon: <Mail className="h-6 w-6 text-primary" />, title: 'Exclusive Newsletter', description: 'Curated startup insights, actionable growth tips, and real-world case studies delivered to your inbox.' },
+  { icon: <Users className="h-6 w-6 text-primary" />, title: 'Founder Community', description: 'Connect with a network of emerging entrepreneurs to share ideas, ask questions, and grow together.' },
+  { icon: <Lightbulb className="h-6 w-6 text-primary" />, title: 'Real-World Breakdowns', description: 'In-depth analysis of how successful businesses solve complex problems and achieve their breakthroughs.' },
 ];
 
 export default function AboutPage() {
