@@ -7,12 +7,12 @@
     "hint": "founder portrait"
   },
   "lovable-banner": {
-    "url": "https://picsum.photos/seed/lovable-banner/1200/630",
+    "url": "/images/lovable-banner.jpg",
     "width": 1200,
-    "height": 630,
-    "alt": "Lovable logo banner",
+    "height": 675,
+    "alt": "Lovable-banner",
     "hint": "tech logo"
-  },
+      },
   "article-card": {
     "url": "https://picsum.photos/seed/article-card/400/225",
     "width": 400,
