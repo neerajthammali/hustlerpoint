@@ -1,6 +1,6 @@
 {
   "profile": {
-    "url": "https://picsum.photos/seed/profile/160/160",
+    "url": "/images/neerajthammali.jpg",
     "width": 160,
     "height": 160,
     "alt": "Founder portrait",
@@ -13,12 +13,12 @@
     "alt": "Lovable-banner",
     "hint": "tech logo"
       },
-  "jamnagar.jpg": {
+  "jamnagar-banner": {
     "url": "public/images/jamnagar.jpg",
     "width": 1200,
     "height": 675,
     "alt": "jamnagar-banner",
-    "hint": "jamnagar refineary"
+    "hint": "business giant's"
   },
   "testimonial-1": {
     "url": "https://picsum.photos/seed/test1/40/40",
