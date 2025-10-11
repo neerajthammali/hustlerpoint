@@ -15,9 +15,9 @@ export default function AboutPage() {
   const profileImage = placeholderImages.profile;
   return (
     <div className="bg-background text-foreground">
-      <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-20">
+      <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16">
         
-        <header className="text-center mb-12">
+        <header className="text-center mb-10">
           <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
             About Hustler Point
           </h1>
@@ -26,7 +26,7 @@ export default function AboutPage() {
           </p>
         </header>
 
-        <div className="space-y-16">
+        <div className="space-y-12">
 
           <section>
             <h2 className="text-center font-headline text-3xl font-bold">Our Mission</h2>
@@ -57,7 +57,7 @@ export default function AboutPage() {
           <Separator />
 
           <a href="https://neerajthammali.vercel.app/" target="_blank" rel="noopener noreferrer" className="group block">
-            <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12 rounded-lg bg-card p-8 shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:bg-accent/10">
+            <section className="flex flex-col md:flex-row items-center gap-8 md:gap-10 rounded-lg bg-card p-6 shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:bg-accent/10">
               <div className="flex-shrink-0">
                 <Image
                   src={profileImage.url}
@@ -84,7 +84,7 @@ export default function AboutPage() {
             <p className="mt-4 mx-auto max-w-2xl text-muted-foreground">
               Ready to share your voice and grow your influence? Start publishing, connect with like-minded individuals, and turn your expertise into opportunity.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-6 flex justify-center gap-4">
               <Button asChild size="lg">
                 <Link href="/articles">Explore Articles</Link>
               </Button>

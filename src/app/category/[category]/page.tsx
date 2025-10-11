@@ -35,8 +35,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const allCategories = [...new Set(allArticles.map(a => a.category))];
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <header className="mb-12 text-center">
+    <div className="container mx-auto px-4 py-12">
+      <header className="mb-10 text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
           Category: <span className="text-primary">{articles[0].category}</span>
         </h1>
@@ -57,4 +57,3 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     </div>
   );
 }
-

@@ -37,7 +37,7 @@ export async function Footer() {
 
   return (
     <footer className="border-t bg-card">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3 md:text-left">
             
             <div>
@@ -79,7 +79,7 @@ export async function Footer() {
             </div>
         </div>
 
-        <Separator className="my-8" />
+        <Separator className="my-6" />
 
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Hustler Point. All rights reserved.</p>

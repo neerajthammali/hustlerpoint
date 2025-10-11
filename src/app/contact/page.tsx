@@ -38,8 +38,8 @@ export default function ContactPage() {
 
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-20">
-      <header className="mb-12 text-center">
+    <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16">
+      <header className="mb-10 text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
           Get in Touch
         </h1>
@@ -48,7 +48,7 @@ export default function ContactPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-16">
+      <div className="grid grid-cols-1 gap-12">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

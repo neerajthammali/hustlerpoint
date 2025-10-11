@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { type Article } from '@/lib/types';
+import type { Article } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from './ui/skeleton';
@@ -17,7 +17,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
     return (
       <Card className="h-full overflow-hidden">
         <Skeleton className="aspect-video w-full" />
-        <div className="p-6">
+        <div className="p-4">
           <Skeleton className="h-4 w-20 mb-2" />
           <Skeleton className="h-5 w-full mb-2" />
           <Skeleton className="h-4 w-4/5" />
@@ -49,7 +49,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
           </Link>
         </CardHeader>
       )}
-      <CardContent className="flex flex-col justify-between p-6">
+      <CardContent className="flex flex-col justify-between p-4">
         <div>
           <Badge variant="secondary" className="mb-2">
             {article.category}

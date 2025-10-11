@@ -27,9 +27,9 @@ export async function TrendingArticles({ currentArticleSlug }: { currentArticleS
         {trendingArticles.map((article) => {
           const { image, image_width, image_height, image_hint } = article;
           return (
-            <Link key={article.slug} href={`/articles/${article.slug}`} className="group flex items-start space-x-4">
+            <Link key={article.slug} href={`/articles/${article.slug}`} className="group flex items-start space-x-3">
               {image && (
-                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
+                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
                     <Image
                       src={image}
                       alt={article.title}

@@ -54,7 +54,7 @@ export default async function Home() {
     <div className="flex flex-col">
       <div className="relative isolate overflow-hidden bg-background">
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px]"></div>
-          <div className="container mx-auto px-4 py-24 sm:py-32">
+          <div className="container mx-auto px-4 py-20 sm:py-28">
             <div className="max-w-2xl text-center mx-auto">
               <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">Publish Your Ideas. Build Your Future.</h1>
               <p className="mt-6 text-lg leading-8 text-foreground/80">
@@ -74,7 +74,7 @@ export default async function Home() {
           </div>
       </div>
       
-      <section className="bg-card py-16 sm:py-20">
+      <section className="bg-card py-12 sm:py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-5xl">
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 text-center md:grid-cols-3">
@@ -92,7 +92,7 @@ export default async function Home() {
         </div>
       </section>
       
-      <section className="py-24 sm:py-32">
+      <section className="py-20 sm:py-28">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Editor's Picks</h2>
@@ -104,7 +104,7 @@ export default async function Home() {
             <ArticleList articles={editorsPicks} />
           </div>
           {editorsPicks.length > 0 && (
-              <div className="mt-16 text-center">
+              <div className="mt-12 text-center">
                 <Button asChild size="lg" variant="outline">
                   <Link href="/articles">
                     View All Articles
@@ -115,7 +115,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-card py-24 sm:py-32">
+      <section className="bg-card py-20 sm:py-28">
         <div className="container mx-auto px-4">
             <div className="text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What They're Saying</h2>
@@ -145,7 +145,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="py-24 sm:py-32">
+      <section className="py-20 sm:py-28">
         <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Join the Community</h2>

@@ -4,8 +4,8 @@ import { Separator } from '@/components/ui/separator';
 export default function TermsOfServicePage() {
   return (
     <div className="bg-background text-foreground">
-      <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-20">
-        <header className="text-center mb-12">
+      <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16">
+        <header className="text-center mb-10">
           <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
             Terms of Service
           </h1>
@@ -14,7 +14,7 @@ export default function TermsOfServicePage() {
           </p>
         </header>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none space-y-8">
+        <div className="prose prose-lg dark:prose-invert max-w-none space-y-6">
           <p>
             Please read these Terms of Service ("Terms") carefully before using the Hustler Point website (the "Service") operated by us. Your access to and use of the Service is conditioned upon your acceptance of and compliance with these Terms.
           </p>

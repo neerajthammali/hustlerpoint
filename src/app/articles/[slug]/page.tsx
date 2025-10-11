@@ -9,7 +9,7 @@ import { getArticleBySlug, getAllArticles } from '@/lib/articles';
 import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
 import Comments from '@/components/comments';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 type ArticlePageProps = {
@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-    <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
+    <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         
         {/* Main Content */}
@@ -169,13 +169,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
             )}
           </article>
-          <Separator className="my-12" />
+          <Separator className="my-10" />
           <Comments articleId={article.slug} />
         </div>
 
         {/* Sidebar */}
         <aside className="lg:col-span-4 lg:pt-24">
-          <div className="sticky top-28 space-y-8">
+          <div className="sticky top-24 space-y-8">
             <TrendingArticles currentArticleSlug={article.slug} />
              <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-6">
                 <p className="text-sm font-semibold">Share this article</p>
