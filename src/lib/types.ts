@@ -10,7 +10,7 @@ export interface Article {
   title: string;
   excerpt: string;
   category: string;
-  imageId?: string;
+  image?: string;
   author: string;
   publishedDate: string;
   content: string;

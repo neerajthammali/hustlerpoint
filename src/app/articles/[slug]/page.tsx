@@ -6,7 +6,6 @@ import { UserCircle, Calendar } from 'lucide-react';
 import ShareButtons from '@/components/share-buttons';
 import { Separator } from '@/components/ui/separator';
 import { getArticleBySlug, getAllArticles } from '@/lib/articles';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
 import Comments from '@/components/comments';
@@ -32,8 +31,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return {};
   }
   
-  const image = PlaceHolderImages.find((img) => img.id === article.imageId);
-  const imageUrl = image ? new URL(image.imageUrl, 'https://www.hustlerpoint.xyz').toString() : '/og-image.png';
+  const imageUrl = article.image ? new URL(article.image, 'https://www.hustlerpoint.xyz').toString() : '/og-image.png';
 
   return {
     title: article.title,
@@ -74,13 +72,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (!article) {
     notFound();
   }
-  const image = PlaceHolderImages.find((img) => img.id === article.imageId);
+  const { image } = article;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: article.title,
-    image: image ? new URL(image.imageUrl, 'https://www.hustlerpoint.xyz').toString() : undefined,
+    image: image ? new URL(image, 'https://www.hustlerpoint.xyz').toString() : undefined,
     author: {
       '@type': 'Person',
       name: article.author,
@@ -133,12 +131,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {image && (
               <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-lg shadow-lg">
                 <Image
-                  src={image.imageUrl}
+                  src={image}
                   alt={article.title}
                   fill
                   className="object-cover"
                   priority
-                  data-ai-hint={image.imageHint}
+                  data-ai-hint="article hero"
                 />
               </div>
             )}

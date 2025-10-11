@@ -68,19 +68,21 @@ export default async function Home() {
                 <ArticleCard key={article.slug} article={article} />
               ))
             ) : (
-              <div className="md:col-span-3 text-center text-muted-foreground">
-                <p>No articles available yet. Stay tuned!</p>
+              <div className="md:col-span-3 text-center text-muted-foreground py-12">
+                <p className="text-lg">No articles yet. Start by creating a new Markdown file in the 'articles' directory.</p>
               </div>
             )
           )}
         </div>
-        <div className="mt-12">
-          <Button asChild size="lg" variant="outline">
-            <Link href="/articles">
-              View More Articles
-            </Link>
-          </Button>
-        </div>
+        {editorsPicks.length > 0 && (
+            <div className="mt-12">
+              <Button asChild size="lg" variant="outline">
+                <Link href="/articles">
+                  View More Articles
+                </Link>
+              </Button>
+            </div>
+        )}
       </section>
 
       <section className="mt-24 text-center">

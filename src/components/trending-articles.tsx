@@ -1,7 +1,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { type Article } from '@/lib/types';
 import { getAllArticles } from '@/lib/articles';
 
@@ -26,20 +25,20 @@ export async function TrendingArticles({ currentArticleSlug }: { currentArticleS
       <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
       <div className="space-y-4">
         {trendingArticles.map((article) => {
-          const image = PlaceHolderImages.find((img) => img.id === article.imageId);
+          const { image } = article;
           return (
             <Link key={article.slug} href={`/articles/${article.slug}`} className="group flex items-start space-x-4">
-              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
-                {image && (
-                  <Image
-                    src={image.imageUrl}
-                    alt={article.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    data-ai-hint={image.imageHint}
-                  />
-                )}
-              </div>
+              {image && (
+                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
+                    <Image
+                      src={image}
+                      alt={article.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      data-ai-hint="article thumbnail"
+                    />
+                </div>
+              )}
               <div>
                 <p className="text-sm font-semibold leading-tight group-hover:text-primary line-clamp-2">{article.title}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{new Date(article.publishedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>

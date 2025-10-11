@@ -7,10 +7,12 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 
-const articlesDirectory = path.join(process.cwd(), 'src/articles');
+const articlesDirectory = path.join(process.cwd(), 'articles');
 
-// This function is guaranteed to only run on the server.
 export async function getAllArticles(): Promise<Article[]> {
+    if (!fs.existsSync(articlesDirectory)) {
+        return [];
+    }
     const fileNames = fs.readdirSync(articlesDirectory);
     const allArticlesData = fileNames.map(fileName => {
         const slug = fileName.replace(/\.md$/, '');
@@ -18,23 +20,16 @@ export async function getAllArticles(): Promise<Article[]> {
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data: frontmatter, content } = matter(fileContents);
 
-        // This is a hack to give a somewhat unique ID and engagement score
-        // In a real app, this would come from a database.
-        const engagement = frontmatter.title.length * 10 % 100;
-        
-        let imageId = `article-${(engagement % 5) + 1}`;
-        if (slug.includes('ai-tools')) {
-          imageId = 'article-3'; // ai-tools slug
-        }
-
-
         return {
             slug,
             content,
-            engagement,
-            imageId,
-            ...frontmatter,
-            publishedDate: new Date(frontmatter.publishedDate).toISOString(),
+            title: frontmatter.title,
+            author: frontmatter.author,
+            category: frontmatter.category,
+            excerpt: frontmatter.description, // Using description as excerpt
+            image: frontmatter.image,
+            publishedDate: new Date(frontmatter.date).toISOString(),
+            engagement: (frontmatter.title.length * 10) % 100, // Dummy engagement
         } as Article;
     });
 

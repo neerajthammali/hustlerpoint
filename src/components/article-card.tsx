@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { type Article } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from './ui/skeleton';
 
 type ArticleCardProps = {
@@ -30,7 +29,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
     )
   }
 
-  const image = PlaceHolderImages.find((img) => img.id === article.imageId);
+  const { image } = article;
 
   return (
     <Card className="group h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
@@ -39,11 +38,11 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
           <Link href={`/articles/${article.slug}`}>
             <div className="relative aspect-video w-full overflow-hidden">
               <Image
-                src={image.imageUrl}
+                src={image}
                 alt={article.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint={image.imageHint}
+                data-ai-hint="article hero"
               />
             </div>
           </Link>
