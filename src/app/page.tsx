@@ -6,6 +6,7 @@ import { getAllArticles } from '@/lib/articles';
 import { TestimonialsCarousel } from '@/components/testimonials';
 import { ArticleCarousel } from '@/components/article-carousel';
 import AnimatedCounter from '@/components/animated-counter';
+import { DiscordIcon, WhatsAppIcon } from '@/components/community-icons';
 
 const stats = [
   { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
@@ -94,6 +95,31 @@ export default async function Home() {
                 </p>
             </div>
             <TestimonialsCarousel />
+        </div>
+      </section>
+
+      <section className="py-24 sm:py-32">
+        <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-2xl text-center">
+                <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Join the Community</h2>
+                <p className="mt-4 text-lg text-muted-foreground">
+                    Connect with fellow hustlers, founders, and creators. Share ideas, get feedback, and grow together.
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button asChild size="lg" className="w-full sm:w-auto">
+                        <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
+                            <DiscordIcon className="mr-2 h-5 w-5" />
+                            Join Discord
+                        </a>
+                    </Button>
+                    <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+                        <a href="https://chat.whatsapp.com/your-invite" target="_blank" rel="noopener noreferrer">
+                            <WhatsAppIcon className="mr-2 h-5 w-5" />
+                            Join WhatsApp
+                        </a>
+                    </Button>
+                </div>
+            </div>
         </div>
       </section>
     </div>
