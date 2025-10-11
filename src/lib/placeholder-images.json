@@ -27,6 +27,13 @@
     "alt": "stable-money-banner",
     "hint": "Fintech & Startups"
   },
+  "haldiram-banner": {
+    "url": "/images/haldiram.png",
+    "width": 1200,
+    "height": 675,
+    "alt": "haldiram-banner",
+    "hint": "Business & Inspiration"
+  },
   "testimonial-1": {
     "url": "https://picsum.photos/seed/test1/40/40",
     "width": 40,
