@@ -1,10 +1,6 @@
-
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
-#
-# A good robots.txt file is important for SEO.
-# It tells search engine crawlers which URLs the crawler can access on your site.
-
+# Allow all crawlers to access all content
 User-agent: *
-Allow: /
+Disallow:
 
+# Point crawlers to the sitemap
 Sitemap: https://www.hustlerpoint.xyz/sitemap.xml
