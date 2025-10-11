@@ -94,7 +94,7 @@ export default async function Home() {
       </section>
 
       <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">A Platform Built for Impact</h2>
+        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What We Cover</h2>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
           We focus on the tools and topics that matter most to modern creators.
         </p>

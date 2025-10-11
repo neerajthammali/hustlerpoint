@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { getAllArticles } from "@/lib/articles";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Instagram, Youtube } from "lucide-react";
 import React from "react";
 
 const navLinks = [
@@ -24,9 +24,11 @@ const XIcon = () => (
 )
 
 const socialLinks = [
-    { href: "https://twitter.com", label: "X", icon: <XIcon /> },
-    { href: "https://linkedin.com", label: "LinkedIn", icon: <Linkedin /> },
-    { href: "https://github.com", label: "GitHub", icon: <Github /> },
+    { href: "https://twitter.com/okasanalpam", label: "X", icon: <XIcon /> },
+    { href: "https://instagram.com/okasanalpam", label: "Instagram", icon: <Instagram /> },
+    { href: "https://youtube.com/@okasanalpam", label: "YouTube", icon: <Youtube /> },
+    { href: "https://linkedin.com/in/neerajtammali", label: "LinkedIn", icon: <Linkedin /> },
+    { href: "https://github.com/neeraj-tammali", label: "GitHub", icon: <Github /> },
 ]
 
 export async function Footer() {
