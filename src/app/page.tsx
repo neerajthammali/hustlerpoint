@@ -1,118 +1,101 @@
 
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, BookOpen, Lightbulb, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import ArticleCard from '@/components/article-card';
-import { type Article } from '@/lib/types';
 import { getAllArticles } from '@/lib/articles';
 import { TestimonialsCarousel } from '@/components/testimonials';
-import { Card, CardContent } from '@/components/ui/card';
+import { ArticleCarousel } from '@/components/article-carousel';
+import AnimatedCounter from '@/components/animated-counter';
 
-const expertiseAreas = [
-  {
-    icon: <CheckCircle className="h-6 w-6 text-primary" />,
-    title: 'Startup Playbooks',
-    description: 'Proven strategies for building and scaling a successful business.',
-  },
-  {
-    icon: <CheckCircle className="h-6 w-6 text-primary" />,
-    title: 'Tech & Productivity',
-    description: 'The latest tools and workflows to optimize your hustle.',
-  },
-  {
-    icon: <CheckCircle className="h-6 w-6 text-primary" />,
-    title: 'Creator Economy',
-    description: 'Insights on audience growth and monetization.',
-  },
-]
+const stats = [
+  { label: 'Articles Published', value: 120, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
+  { label: 'Ideas Shared', value: 850, icon: <Lightbulb className="h-8 w-8 text-primary" />, growth: 20 },
+  { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" />, growth: 10 },
+];
 
 export default async function Home() {
   const allArticles = await getAllArticles();
   
-  const editorsPicks = allArticles.slice(0, 3);
-
-  const isLoading = false; // Data is pre-fetched on the server
+  const editorsPicks = allArticles.filter(a => a.featured).slice(0, 5);
 
   return (
-    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
-      <div className="flex flex-col items-center justify-center space-y-6 text-center">
-        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          Publish Your Ideas. Build Your Future.
-        </h1>
-        <p className="max-w-[700px] text-foreground/80 md:text-xl">
-          Hustler Point is a creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.
-        </p>
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Button asChild size="lg">
-            <Link href="/articles">
-              Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/about">Learn More</Link>
-          </Button>
-        </div>
-      </div>
-
-      <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Editor's Picks</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
-          Hand-picked articles from our editors to get you started.
-        </p>
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {isLoading ? (
-            Array.from({ length: 3 }).map((_, i) => <ArticleCard key={i} article={null} isLoading={true}/>)
-          ) : (
-            editorsPicks.length > 0 ? (
-              editorsPicks.map(article => (
-                <ArticleCard key={article.slug} article={article} />
-              ))
-            ) : (
-              <div className="md:col-span-3 text-center text-muted-foreground py-12">
-                <p className="text-lg">No articles yet. Start by creating a new Markdown file in the 'articles' directory.</p>
+    <div className="flex flex-col">
+      <div className="relative isolate overflow-hidden bg-background">
+          <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          <div className="container mx-auto px-4 py-24 sm:py-32">
+            <div className="max-w-2xl text-center mx-auto">
+              <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                Publish Your Ideas. Build Your Future.
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-muted-foreground">
+                A creator platform for writers, founders, and learners to share powerful insights and grow an audience.
+              </p>
+              <div className="mt-10 flex items-center justify-center gap-x-6">
+                <Button asChild size="lg">
+                    <Link href="/articles">
+                    Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                    <Link href="/about">Learn More</Link>
+                </Button>
               </div>
-            )
+            </div>
+          </div>
+      </div>
+      
+      <section className="bg-card py-16 sm:py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 text-center md:grid-cols-3">
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex flex-col items-center">
+                  {stat.icon}
+                  <div className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                    <AnimatedCounter to={stat.value} />+
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section className="py-24 sm:py-32">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">Editor's Picks</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
+              Hand-picked articles from our editors to get you started.
+            </p>
+          </div>
+          <div className="mt-12">
+            <ArticleCarousel articles={editorsPicks} />
+          </div>
+          {editorsPicks.length > 0 && (
+              <div className="mt-16 text-center">
+                <Button asChild size="lg" variant="outline">
+                  <Link href="/articles">
+                    View All Articles
+                  </Link>
+                </Button>
+              </div>
           )}
         </div>
-        {editorsPicks.length > 0 && (
-            <div className="mt-12">
-              <Button asChild size="lg" variant="outline">
-                <Link href="/articles">
-                  View More Articles
-                </Link>
-              </Button>
+      </section>
+
+      <section className="bg-card py-24 sm:py-32">
+        <div className="container mx-auto px-4">
+            <div className="text-center">
+                <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What They're Saying</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
+                Testimonials from our readers and community members.
+                </p>
             </div>
-        )}
-      </section>
-
-      <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What They're Saying</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
-          Testimonials from our readers and community members.
-        </p>
-        <TestimonialsCarousel />
-      </section>
-
-      <section className="mt-24 text-center">
-        <h2 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl">What We Cover</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground md:text-lg">
-          We focus on the tools and topics that matter most to modern creators.
-        </p>
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {expertiseAreas.map((item) => (
-                <Card key={item.title} className="text-center">
-                    <CardContent className="p-6">
-                        <div className="mb-4 flex justify-center">
-                          {item.icon}
-                        </div>
-                        <h3 className="font-semibold text-lg">{item.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
-                    </CardContent>
-                </Card>
-            ))}
+            <TestimonialsCarousel />
         </div>
       </section>
-
     </div>
   );
 }
