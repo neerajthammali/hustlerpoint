@@ -24,9 +24,9 @@ const XIcon = () => (
 )
 
 const socialLinks = [
-    { href: "https://twitter.com/okasanalpam", label: "X", icon: <XIcon /> },
-    { href: "https://instagram.com/okasanalpam", label: "Instagram", icon: <Instagram /> },
-    { href: "https://youtube.com/@okasanalpam", label: "YouTube", icon: <Youtube /> },
+    { href: "https://twitter.com/okasankalpam", label: "X", icon: <XIcon /> },
+    { href: "https://instagram.com/okasankalpam", label: "Instagram", icon: <Instagram /> },
+    { href: "https://youtube.com/@okasankalpam", label: "YouTube", icon: <Youtube /> },
     { href: "https://linkedin.com/in/neerajtammali", label: "LinkedIn", icon: <Linkedin /> },
     { href: "https://github.com/neeraj-tammali", label: "GitHub", icon: <Github /> },
 ]
