@@ -1,6 +1,6 @@
 
 import Image from 'next/image';
-import { Linkedin, BookOpen, BrainCircuit, Users, Mail, Lightbulb } from 'lucide-react';
+import { Linkedin, BookOpen, BrainCircuit, Users, Mail, Lightbulb, Link as LinkIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -55,25 +55,28 @@ export default function AboutPage() {
 
           <Separator />
 
-          <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12 rounded-lg bg-card p-8 shadow-sm">
-            <div className="flex-shrink-0">
-              <Image
-                src="/profile.jpg"
-                alt="Neeraj Thammali"
-                width={160}
-                height={160}
-                className="rounded-full border-4 border-primary/20 shadow-lg object-cover"
-                data-ai-hint="founder portrait"
-              />
-            </div>
-            <div className="text-center md:text-left">
-              <h2 className="font-headline text-2xl font-bold">A Note from the Founder</h2>
-              <p className="mt-2 text-lg font-semibold text-primary">Hi, I’m Neeraj Thammali 🤘</p>
-              <p className="mt-4 text-muted-foreground">
-                I started Hustler Point because I believe the best ideas come from those in the trenches — the builders, the creators, and the self-starters. My goal is to provide the tools and platform to help those ideas find an audience and make an impact.
-              </p>
-            </div>
-          </section>
+          <a href="https://neerajthammali.vercel.app/" target="_blank" rel="noopener noreferrer" className="group block">
+            <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12 rounded-lg bg-card p-8 shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:bg-accent/10">
+              <div className="flex-shrink-0">
+                <Image
+                  src="/profile.jpg"
+                  alt="Neeraj Thammali"
+                  width={160}
+                  height={160}
+                  className="rounded-full border-4 border-primary/20 shadow-lg object-cover transition-transform duration-300 group-hover:scale-105"
+                  data-ai-hint="founder portrait"
+                />
+              </div>
+              <div className="text-center md:text-left flex-1">
+                <h2 className="font-headline text-2xl font-bold">A Note from the Founder</h2>
+                <p className="mt-2 text-lg font-semibold text-primary">Hi, I’m Neeraj Thammali 🤘</p>
+                <p className="mt-4 text-muted-foreground">
+                  I started Hustler Point because I believe the best ideas come from those in the trenches. Click to learn more about my journey.
+                </p>
+              </div>
+              <LinkIcon className="h-6 w-6 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
+            </section>
+          </a>
 
           <section className="text-center rounded-lg bg-card p-8 shadow-sm">
             <h2 className="font-headline text-3xl font-bold">Join the Movement</h2>
