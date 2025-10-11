@@ -3,22 +3,52 @@ import { ArrowRight, BookOpen, Lightbulb, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getAllArticles } from '@/lib/articles';
-import { TestimonialsCarousel } from '@/components/testimonials';
-import { ArticleCarousel } from '@/components/article-carousel';
-import AnimatedCounter from '@/components/animated-counter';
 import { DiscordIcon, WhatsAppIcon } from '@/components/community-icons';
-import AnimatedHeadline from '@/components/animated-headline';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import ArticleList from '@/components/article-list';
+
 
 const stats = [
-  { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
-  { label: 'Ideas Shared', value: 85, icon: <Lightbulb className="h-8 w-8 text-primary" />, growth: 20 },
-  { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" />, growth: 10 },
+  { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" /> },
+  { label: 'Ideas Shared', value: 85, icon: <Lightbulb className="h-8 w-8 text-primary" /> },
+  { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" /> },
+];
+
+const testimonials = [
+  {
+    quote: "Hustler's Point is my go-to for no-fluff, actionable advice. The case studies on startup growth have been a game-changer for my own venture.",
+    author: "Alex Johnson",
+    title: "SaaS Founder",
+    avatar: {
+      url: "https://picsum.photos/seed/test1/40/40",
+      hint: "person avatar"
+    },
+  },
+  {
+    quote: "The community is incredible. Being able to connect with other founders who are facing the same challenges is invaluable. It's like a mastermind group in my pocket.",
+    author: "Samantha Lee",
+    title: "Early-Stage Entrepreneur",
+    avatar: {
+      url: "https://picsum.photos/seed/test2/40/40",
+      hint: "person avatar"
+    },
+  },
+  {
+    quote: "The breakdowns of how successful companies solved real-world problems are pure gold. It's inspiring and gives me tangible ideas to apply to my own business.",
+    author: "David Chen",
+    title: "Bootstrapped Founder",
+    avatar: {
+      url: "https://picsum.photos/seed/test3/40/40",
+      hint: "person avatar"
+    },
+  },
 ];
 
 export default async function Home() {
   const allArticles = await getAllArticles();
   
-  const editorsPicks = allArticles.filter(a => a.featured).slice(0, 5);
+  const editorsPicks = allArticles.filter(a => a.featured).slice(0, 3);
 
   return (
     <div className="flex flex-col">
@@ -26,7 +56,7 @@ export default async function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px]"></div>
           <div className="container mx-auto px-4 py-24 sm:py-32">
             <div className="max-w-2xl text-center mx-auto">
-              <AnimatedHeadline text="Publish Your Ideas. Build Your Future." />
+              <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">Publish Your Ideas. Build Your Future.</h1>
               <p className="mt-6 text-lg leading-8 text-foreground/80">
                 A creator platform for writers, founders, and learners to share powerful insights and grow an audience.
               </p>
@@ -52,7 +82,7 @@ export default async function Home() {
                 <div key={stat.label} className="flex flex-col items-center">
                   {stat.icon}
                   <div className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
-                    <AnimatedCounter to={stat.value} />+
+                    {stat.value}+
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
                 </div>
@@ -71,7 +101,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="mt-12">
-            <ArticleCarousel articles={editorsPicks} />
+            <ArticleList articles={editorsPicks} />
           </div>
           {editorsPicks.length > 0 && (
               <div className="mt-16 text-center">
@@ -93,7 +123,25 @@ export default async function Home() {
                 Testimonials from our readers and community members.
                 </p>
             </div>
-            <TestimonialsCarousel />
+             <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="flex h-full flex-col justify-between text-left">
+                  <CardContent className="p-6">
+                    <p className="italic text-muted-foreground">"{testimonial.quote}"</p>
+                  </CardContent>
+                  <div className="flex items-center gap-4 border-t bg-card/50 p-6">
+                    <Avatar>
+                      <AvatarImage src={testimonial.avatar.url} alt={testimonial.author} data-ai-hint={testimonial.avatar.hint} />
+                      <AvatarFallback>{testimonial.author.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold">{testimonial.author}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
         </div>
       </section>
 

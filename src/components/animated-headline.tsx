@@ -1,33 +1,20 @@
-'use client';
+import { type Article } from '@/lib/types';
+import ArticleList from '@/components/article-list';
+import { getAllArticles } from '@/lib/articles';
 
-import { useEffect, useState } from 'react';
-
-type AnimatedHeadlineProps = {
-  text: string;
-};
-
-export default function AnimatedHeadline({ text }: AnimatedHeadlineProps) {
-  const words = text.split(' ');
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+export default async function ArticlesPage() {
+  const articles = await getAllArticles();
 
   return (
-    <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-      {words.map((word, index) => (
-        <span key={index} className="inline-block">
-          {isMounted && (
-            <span
-              className="inline-block animate-fade-in"
-              style={{ animationDelay: `${index * 0.15}s`, opacity: 0 }}
-            >
-              {word}&nbsp;
-            </span>
-          )}
-        </span>
-      ))}
-    </h1>
+    <div className="container mx-auto px-4 py-16">
+      <header className="mb-12 text-center">
+        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">All Articles</h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+          Explore our full library of insights on technology, creativity, and the startup world.
+        </p>
+      </header>
+
+      <ArticleList articles={articles} />
+    </div>
   );
 }
