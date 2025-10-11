@@ -13,6 +13,7 @@ import { ThemeToggle } from "../theme-toggle";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
+  { href: "/admin/editor", label: "Editor" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -71,8 +72,7 @@ export function Header() {
             className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
             {link.label}
-            </Link>
-          ))}
+            </Link>))}
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
@@ -82,5 +82,3 @@ export function Header() {
     </header>
   );
 }
-
-    

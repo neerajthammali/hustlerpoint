@@ -29,8 +29,7 @@ const expertiseAreas = [
 export default async function Home() {
   const allArticles = await getAllArticles();
   
-  const editorsPicksSlugs = ['the-art-of-the-pitch-deck', '5-ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
-  const editorsPicks = allArticles.filter(article => editorsPicksSlugs.includes(article.slug));
+  const editorsPicks = allArticles.slice(0, 3);
 
   const isLoading = false; // Data is pre-fetched on the server
 
@@ -64,9 +63,15 @@ export default async function Home() {
           {isLoading ? (
             Array.from({ length: 3 }).map((_, i) => <ArticleCard key={i} article={null} isLoading={true}/>)
           ) : (
-            editorsPicks.map(article => (
-              <ArticleCard key={article.slug} article={article} />
-            ))
+            editorsPicks.length > 0 ? (
+              editorsPicks.map(article => (
+                <ArticleCard key={article.slug} article={article} />
+              ))
+            ) : (
+              <div className="md:col-span-3 text-center text-muted-foreground">
+                <p>No articles available yet. Stay tuned!</p>
+              </div>
+            )
           )}
         </div>
         <div className="mt-12">
