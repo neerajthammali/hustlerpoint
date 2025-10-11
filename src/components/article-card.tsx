@@ -29,7 +29,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
     )
   }
 
-  const { image, image_alt } = article;
+  const { image, image_alt, image_width, image_height, image_hint } = article;
 
   return (
     <Card className="group h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
@@ -40,9 +40,10 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
               <Image
                 src={image}
                 alt={image_alt || article.title}
-                fill
+                width={image_width || 400}
+                height={image_height || 225}
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint="article hero"
+                data-ai-hint={image_hint || "article hero"}
               />
             </div>
           </Link>

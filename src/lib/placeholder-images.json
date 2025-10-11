@@ -1,0 +1,23 @@
+{
+  "profile": {
+    "url": "https://picsum.photos/seed/profile/160/160",
+    "width": 160,
+    "height": 160,
+    "alt": "Founder portrait",
+    "hint": "founder portrait"
+  },
+  "lovable-banner": {
+    "url": "https://picsum.photos/seed/lovable-banner/1200/630",
+    "width": 1200,
+    "height": 630,
+    "alt": "Lovable logo banner",
+    "hint": "tech logo"
+  },
+  "article-card": {
+    "url": "https://picsum.photos/seed/article-card/400/225",
+    "width": 400,
+    "height": 225,
+    "alt": "Article hero image",
+    "hint": "article hero"
+  }
+}

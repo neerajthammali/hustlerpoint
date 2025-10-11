@@ -23,8 +23,11 @@ export interface Article {
   modifiedDate?: string; // from 'modified_date' in frontmatter
   
   // Media
-  image?: string;
-  image_alt?: string;
+  image: string;
+  image_alt: string;
+  image_width: number;
+  image_height: number;
+  image_hint: string;
   
   // SEO & Technical
   status?: 'published' | 'draft';

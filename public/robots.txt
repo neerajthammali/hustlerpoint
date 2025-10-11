@@ -1,6 +1,5 @@
-# Allow all crawlers to access all content
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
 
-# Point crawlers to the sitemap
 Sitemap: https://www.hustlerpoint.xyz/sitemap.xml

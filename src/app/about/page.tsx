@@ -3,6 +3,7 @@ import { Linkedin, BookOpen, BrainCircuit, Users, Mail, Lightbulb, Link as LinkI
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 const whatWeDo = [
   { icon: <Mail className="h-6 w-6 text-primary" />, title: 'Exclusive Newsletter', description: 'Curated startup insights, actionable growth tips, and real-world case studies delivered to your inbox.' },
@@ -11,6 +12,7 @@ const whatWeDo = [
 ];
 
 export default function AboutPage() {
+  const profileImage = placeholderImages.profile;
   return (
     <div className="bg-background text-foreground">
       <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-20">
@@ -58,12 +60,12 @@ export default function AboutPage() {
             <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12 rounded-lg bg-card p-8 shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:bg-accent/10">
               <div className="flex-shrink-0">
                 <Image
-                  src="/profile.jpg"
-                  alt="Neeraj Thammali"
-                  width={160}
-                  height={160}
+                  src={profileImage.url}
+                  alt={profileImage.alt}
+                  width={profileImage.width}
+                  height={profileImage.height}
                   className="rounded-full border-4 border-primary/20 shadow-lg object-cover transition-transform duration-300 group-hover:scale-105"
-                  data-ai-hint="founder portrait"
+                  data-ai-hint={profileImage.hint}
                 />
               </div>
               <div className="text-center md:text-left flex-1">

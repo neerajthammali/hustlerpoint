@@ -25,7 +25,7 @@ export async function TrendingArticles({ currentArticleSlug }: { currentArticleS
       <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
       <div className="space-y-4">
         {trendingArticles.map((article) => {
-          const { image } = article;
+          const { image, image_width, image_height, image_hint } = article;
           return (
             <Link key={article.slug} href={`/articles/${article.slug}`} className="group flex items-start space-x-4">
               {image && (
@@ -33,9 +33,10 @@ export async function TrendingArticles({ currentArticleSlug }: { currentArticleS
                     <Image
                       src={image}
                       alt={article.title}
-                      fill
+                      width={image_width || 64}
+                      height={image_height || 64}
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      data-ai-hint="article thumbnail"
+                      data-ai-hint={image_hint || "article thumbnail"}
                     />
                 </div>
               )}

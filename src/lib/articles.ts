@@ -6,6 +6,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import placeholderImages from './placeholder-images.json';
 
 const articlesDirectory = path.join(process.cwd(), 'articles');
 
@@ -24,6 +25,10 @@ export async function getAllArticles(): Promise<Article[]> {
         if (frontmatter.status !== 'published') {
             return null;
         }
+        
+        const imageId = frontmatter.image_id as keyof typeof placeholderImages | undefined;
+        const imageInfo = imageId ? placeholderImages[imageId] : placeholderImages['article-card'];
+
 
         return {
             slug: frontmatter.slug,
@@ -33,8 +38,11 @@ export async function getAllArticles(): Promise<Article[]> {
             publisher: frontmatter.publisher,
             category: frontmatter.category,
             excerpt: frontmatter.description,
-            image: frontmatter.image,
-            image_alt: frontmatter.image_alt,
+            image: imageInfo.url,
+            image_alt: imageInfo.alt,
+            image_width: imageInfo.width,
+            image_height: imageInfo.height,
+            image_hint: imageInfo.hint,
             publishedDate: new Date(frontmatter.date).toISOString(),
             modifiedDate: frontmatter.modified_date ? new Date(frontmatter.modified_date).toISOString() : new Date(frontmatter.date).toISOString(),
             tags: frontmatter.tags || [],
