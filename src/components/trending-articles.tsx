@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { type Article } from '@/lib/types';
+import type { Article } from '@/lib/types';
 import { getAllArticles } from '@/lib/articles';
 
 export async function TrendingArticles({ currentArticleSlug }: { currentArticleSlug?: string }) {

@@ -2,7 +2,7 @@
 'use client';
 
 import ArticleCard from '@/components/article-card';
-import { type Article } from '@/lib/types';
+import type { Article } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card } from '@/components/ui/card';
 

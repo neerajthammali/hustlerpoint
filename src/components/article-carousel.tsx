@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { type Article } from "@/lib/types";
+import type { Article } from "@/lib/types";
 import ArticleCard from "./article-card";
 import Autoplay from "embla-carousel-autoplay";
 import { Skeleton } from "./ui/skeleton";
