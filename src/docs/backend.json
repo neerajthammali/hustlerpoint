@@ -26,30 +26,18 @@
           "type": "string",
           "description": "URL-friendly slug, derived from the filename."
         },
-        "keywords": {
-          "type": "string",
-          "description": "Comma-separated keywords for SEO, from frontmatter."
-        },
-        "metaDescription": {
+        "description": {
           "type": "string",
           "description": "Meta description for SEO, from frontmatter."
         },
-        "canonicalUrl": {
-          "type": "string",
-          "description": "Canonical URL if the content is republished, from frontmatter."
-        },
-        "publishedDate": {
+        "date": {
           "type": "string",
           "format": "date-time",
           "description": "The date the article was published, from frontmatter."
         },
-        "featured": {
-          "type": "boolean",
-          "description": "Whether the article is a featured post, from frontmatter."
-        },
-        "imageId": {
+        "image": {
           "type": "string",
-          "description": "ID for the placeholder image."
+          "description": "URL for the article's featured image."
         }
       },
       "required": [
@@ -58,11 +46,76 @@
         "slug",
         "author",
         "category",
-        "publishedDate"
+        "date",
+        "description"
       ]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's public profile information.",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL of the user's profile picture."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the user profile was created."
+        }
+      },
+      "required": ["displayName", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A comment on an article.",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The content of the comment."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "The UID of the user who wrote the comment."
+        },
+        "authorName": {
+          "type": "string",
+          "description": "The display name of the author at the time of commenting."
+        },
+        "authorAvatar": {
+          "type": "string",
+          "description": "The avatar URL of the author at the time of commenting."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the comment was created."
+        }
+      },
+      "required": ["text", "authorId", "authorName", "createdAt"]
     }
   },
   "auth": {
-    "providers": []
+    "providers": ["anonymous"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores public information for each user."
+    },
+    "/comments/{articleSlug}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/Comment"
+      },
+      "description": "Stores comments for a specific article, where {articleSlug} is the unique slug of the article."
+    }
   }
 }

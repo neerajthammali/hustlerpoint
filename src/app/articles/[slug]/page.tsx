@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-    <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16">
+    <div className="container mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         
         {/* Main Content */}
@@ -169,7 +169,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
             )}
           </article>
-          <Separator className="my-10" />
+          <Separator className="my-8" />
           <Comments articleId={article.slug} />
         </div>
 
@@ -177,7 +177,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <aside className="lg:col-span-4 lg:pt-24">
           <div className="sticky top-24 space-y-8">
             <TrendingArticles currentArticleSlug={article.slug} />
-             <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-6">
+             <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-card p-4">
                 <p className="text-sm font-semibold">Share this article</p>
                 <ShareButtons article={{ title: article.title, slug: article.slug }} />
               </div>
