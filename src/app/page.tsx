@@ -8,7 +8,7 @@ import { ArticleCarousel } from '@/components/article-carousel';
 import AnimatedCounter from '@/components/animated-counter';
 
 const stats = [
-  { label: 'Articles Published', value: 120, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
+  { label: 'Articles Published', value: 12, icon: <BookOpen className="h-8 w-8 text-primary" />, growth: 15 },
   { label: 'Ideas Shared', value: 850, icon: <Lightbulb className="h-8 w-8 text-primary" />, growth: 20 },
   { label: 'Community Members', value: 500, icon: <Users className="h-8 w-8 text-primary" />, growth: 10 },
 ];
@@ -27,7 +27,7 @@ export default async function Home() {
               <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
                 Publish Your Ideas. Build Your Future.
               </h1>
-              <p className="mt-6 text-lg leading-8 text-muted-foreground">
+              <p className="mt-6 text-lg leading-8 text-foreground/80">
                 A creator platform for writers, founders, and learners to share powerful insights and grow an audience.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
