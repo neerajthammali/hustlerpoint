@@ -14,21 +14,21 @@ import Autoplay from "embla-carousel-autoplay";
 
 const testimonials = [
   {
-    quote: "Hustler's Point is my go-to for no-fluff, actionable advice. The articles on startup growth have been a game-changer for my own venture.",
+    quote: "Hustler's Point is my go-to for no-fluff, actionable advice. The case studies on startup growth have been a game-changer for my own venture.",
     author: "Alex Johnson",
-    title: "Founder, TechSavvy",
+    title: "SaaS Founder",
     avatar: "https://picsum.photos/seed/test1/40/40",
   },
   {
-    quote: "The productivity hacks are pure gold. I've streamlined my workflow and saved hours every week thanks to the tips I've picked up here.",
+    quote: "The community is incredible. Being able to connect with other founders who are facing the same challenges is invaluable. It's like a mastermind group in my pocket.",
     author: "Samantha Lee",
-    title: "Freelance Developer",
+    title: "Early-Stage Entrepreneur",
     avatar: "https://picsum.photos/seed/test2/40/40",
   },
   {
-    quote: "As someone navigating the creator economy, the insights from Hustler's Point are invaluable. It's like having a mentor in my pocket.",
+    quote: "The breakdowns of how successful companies solved real-world problems are pure gold. It's inspiring and gives me tangible ideas to apply to my own business.",
     author: "David Chen",
-    title: "YouTuber",
+    title: "Bootstrapped Founder",
     avatar: "https://picsum.photos/seed/test3/40/40",
   },
 ];
@@ -76,3 +76,4 @@ export function TestimonialsCarousel() {
     </Carousel>
   );
 }
+
