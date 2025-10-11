@@ -8,6 +8,7 @@ import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { ThemeToggle } from "../theme-toggle";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -83,7 +84,7 @@ export function Header() {
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
-          {/* ThemeToggle removed */}
+          <ThemeToggle />
         </div>
       </div>
     </header>

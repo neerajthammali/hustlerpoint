@@ -4,57 +4,65 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 220 13% 96%; /* Vision Gray: #F3F4F6 */
+    --foreground: 0 0% 13%; /* Ink Charcoal: #222222 */
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 220 13% 96%;
+    --card-foreground: 0 0% 13%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 13% 96%;
+    --popover-foreground: 0 0% 13%;
 
-    --primary: 209 100% 69%; /* Neon Blue: #63B5FF */
-    --primary-foreground: 210 40% 98%;
+    --primary: 212 100% 50%; /* Hustler Blue: #0077FF */
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 208 94% 60%; /* Accent Blue: #4799E3 */
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 0 0% 9%;
+    
+    --muted: 220 13% 91%;
+    --muted-foreground: 220 9% 45%;
+    
+    --accent: 26 100% 50%; /* Hustle Orange: #FF6B00 */
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 209 100% 69%;
+    --border: 220 13% 89%;
+    --input: 220 13% 89%;
+    --ring: 212 100% 50%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 10%; /* Desaturated Black: #1A1A1A */
+    --background: 0 0% 4%; /* Drive Black: #0A0A0A */
     --foreground: 0 0% 98%;
-    --card: 0 0% 12%;
+
+    --card: 0 0% 4%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 12%;
+
+    --popover: 0 0% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: 209 100% 69%; /* Neon Blue: #63B5FF */
-    --primary-foreground: 0 0% 3.9%;
+
+    --primary: 212 100% 50%; /* Hustler Blue: #0077FF */
+    --primary-foreground: 0 0% 98%;
+
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 98%;
+
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 208 94% 60%; /* Accent Blue: #4799E3 */
+    
+    --accent: 26 100% 50%; /* Hustle Orange: #FF6B00 */
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 209 100% 69%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 212 100% 50%;
   }
 }
 
