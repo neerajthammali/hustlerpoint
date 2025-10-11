@@ -29,7 +29,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
     )
   }
 
-  const { image } = article;
+  const { image, image_alt } = article;
 
   return (
     <Card className="group h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
@@ -39,7 +39,7 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
             <div className="relative aspect-video w-full overflow-hidden">
               <Image
                 src={image}
-                alt={article.title}
+                alt={image_alt || article.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 data-ai-hint="article hero"
@@ -58,8 +58,17 @@ export default function ArticleCard({ article, isLoading }: ArticleCardProps) {
           </Link>
           <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{article.excerpt}</p>
         </div>
-        <div className="mt-4 pt-4 text-xs text-muted-foreground">
-          {new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        <div className="mt-4 flex flex-col gap-2">
+            {article.tags && article.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                    {article.tags.slice(0, 3).map(tag => (
+                        <Badge key={tag} variant="outline" className="text-xs font-light">{tag}</Badge>
+                    ))}
+                </div>
+            )}
+            <div className="text-xs text-muted-foreground">
+            {new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
         </div>
       </CardContent>
     </Card>

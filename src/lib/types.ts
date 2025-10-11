@@ -6,17 +6,33 @@ export type Stat = {
 };
 
 export interface Article {
+  // Core Fields
   slug: string;
   title: string;
-  excerpt: string;
-  category: string;
-  image?: string;
-  author: string;
-  publishedDate: string;
   content: string;
-  engagement: number;
-  keywords?: string;
-  metaDescription?: string;
+  excerpt: string; // from 'description' in frontmatter
+  
+  // Metadata
+  author: string;
+  publisher?: string;
+  category: string;
+  tags?: string[];
+  
+  // Dates
+  publishedDate: string; // from 'date' in frontmatter
+  modifiedDate?: string; // from 'modified_date' in frontmatter
+  
+  // Media
+  image?: string;
+  image_alt?: string;
+  
+  // SEO & Technical
+  status?: 'published' | 'draft';
+  language?: string;
   canonicalUrl?: string;
+  
+  // Display & Engagement
+  read_time?: string;
   featured?: boolean;
+  engagement: number; // Placeholder for analytics
 }

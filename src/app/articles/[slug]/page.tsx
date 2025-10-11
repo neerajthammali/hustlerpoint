@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { UserCircle, Calendar } from 'lucide-react';
+import { UserCircle, Calendar, Clock, Tag } from 'lucide-react';
 import ShareButtons from '@/components/share-buttons';
 import { Separator } from '@/components/ui/separator';
 import { getArticleBySlug, getAllArticles } from '@/lib/articles';
@@ -10,6 +10,7 @@ import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
 import Comments from '@/components/comments';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 type ArticlePageProps = {
   params: {
@@ -35,28 +36,29 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
   return {
     title: article.title,
-    description: article.metaDescription || article.excerpt,
-    keywords: article.keywords,
+    description: article.excerpt,
+    keywords: article.tags,
     openGraph: {
       title: article.title,
-      description: article.metaDescription || article.excerpt,
+      description: article.excerpt,
       type: 'article',
       url: `/articles/${article.slug}`,
       publishedTime: article.publishedDate,
+      modifiedTime: article.modifiedDate,
       authors: [article.author],
       images: [
         {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: article.title,
+          alt: article.image_alt || article.title,
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
-      description: article.metaDescription || article.excerpt,
+      description: article.excerpt,
       images: [imageUrl],
     },
     alternates: {
@@ -85,15 +87,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Hustler Point',
+      name: article.publisher || 'Hustler Point',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.hustlerpoint.xyz/logo.png',
       },
     },
     datePublished: article.publishedDate,
-    dateModified: article.publishedDate, // Assuming no updates for now
-    description: article.metaDescription || article.excerpt,
+    dateModified: article.modifiedDate,
+    description: article.excerpt,
   };
 
 
@@ -110,9 +112,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="lg:col-span-8">
           <article>
             <header className="mb-8">
-              <Badge variant="secondary" className="mb-4">
-                {article.category}
-              </Badge>
+              <Link href={`/category/${article.category.toLowerCase()}`}>
+                <Badge variant="secondary" className="mb-4">
+                  {article.category}
+                </Badge>
+              </Link>
               <h1 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 {article.title}
               </h1>
@@ -125,6 +129,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <Calendar className="h-4 w-4" />
                   <span>{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 </div>
+                {article.read_time && (
+                    <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{article.read_time}</span>
+                    </div>
+                )}
               </div>
             </header>
 
@@ -132,7 +142,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-lg shadow-lg">
                 <Image
                   src={image}
-                  alt={article.title}
+                  alt={article.image_alt || article.title}
                   fill
                   className="object-cover"
                   priority
@@ -142,10 +152,22 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
 
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              {article.excerpt && <p className="lead text-xl text-muted-foreground">{article.excerpt}</p>}
-              <Separator className="my-8" />
               <ArticleRenderer content={article.content} />
             </div>
+
+            {article.tags && article.tags.length > 0 && (
+                <div className="mt-8">
+                    <div className="flex items-center gap-2">
+                        <Tag className="h-4 w-4 text-muted-foreground" />
+                        <h3 className="text-sm font-semibold text-muted-foreground">Tags:</h3>
+                        <div className="flex flex-wrap gap-2">
+                        {article.tags.map(tag => (
+                            <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                        ))}
+                        </div>
+                    </div>
+                </div>
+            )}
           </article>
           <Separator className="my-12" />
           <Comments articleId={article.slug} />

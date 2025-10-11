@@ -14,24 +14,41 @@ export async function getAllArticles(): Promise<Article[]> {
         return [];
     }
     const fileNames = fs.readdirSync(articlesDirectory);
-    const allArticlesData = fileNames.map(fileName => {
-        const slug = fileName.replace(/\.md$/, '');
+    const allArticlesData = fileNames
+    .map(fileName => {
         const fullPath = path.join(articlesDirectory, fileName);
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data: frontmatter, content } = matter(fileContents);
 
+        // Skip drafts or non-published articles
+        if (frontmatter.status !== 'published') {
+            return null;
+        }
+
         return {
-            slug,
+            slug: frontmatter.slug,
             content,
             title: frontmatter.title,
             author: frontmatter.author,
+            publisher: frontmatter.publisher,
             category: frontmatter.category,
-            excerpt: frontmatter.description, // Using description as excerpt
+            excerpt: frontmatter.description,
             image: frontmatter.image,
+            image_alt: frontmatter.image_alt,
             publishedDate: new Date(frontmatter.date).toISOString(),
-            engagement: (frontmatter.title.length * 10) % 100, // Dummy engagement
+            modifiedDate: frontmatter.modified_date ? new Date(frontmatter.modified_date).toISOString() : new Date(frontmatter.date).toISOString(),
+            tags: frontmatter.tags || [],
+            read_time: frontmatter.read_time,
+            status: frontmatter.status,
+            language: frontmatter.language,
+            canonicalUrl: frontmatter.canonicalUrl,
+            featured: frontmatter.featured || false,
+            // Engagement is a dummy value for now, can be replaced with real analytics
+            engagement: (frontmatter.title.length * 10) % 100, 
         } as Article;
-    });
+    })
+    .filter((article): article is Article => article !== null); // Filter out nulls (drafts)
+
 
     return allArticlesData.sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
 }
