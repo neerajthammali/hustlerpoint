@@ -10,6 +10,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TrendingArticles } from '@/components/trending-articles';
 import ArticleRenderer from '@/components/article-renderer';
 import Comments from '@/components/comments';
+import { Metadata } from 'next';
 
 type ArticlePageProps = {
   params: {
@@ -24,6 +25,49 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const article = await getArticleBySlug(params.slug);
+
+  if (!article) {
+    return {};
+  }
+  
+  const image = PlaceHolderImages.find((img) => img.id === article.imageId);
+  const imageUrl = image ? new URL(image.imageUrl, 'https://www.hustlerpoint.xyz').toString() : '/og-image.png';
+
+  return {
+    title: article.title,
+    description: article.metaDescription || article.excerpt,
+    keywords: article.keywords,
+    openGraph: {
+      title: article.title,
+      description: article.metaDescription || article.excerpt,
+      type: 'article',
+      url: `/articles/${article.slug}`,
+      publishedTime: article.publishedDate,
+      authors: [article.author],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.metaDescription || article.excerpt,
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: article.canonicalUrl || `/articles/${article.slug}`,
+    },
+  };
+}
+
+
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await getArticleBySlug(params.slug);
 
@@ -32,8 +76,35 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
   const image = PlaceHolderImages.find((img) => img.id === article.imageId);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    image: image ? new URL(image.imageUrl, 'https://www.hustlerpoint.xyz').toString() : undefined,
+    author: {
+      '@type': 'Person',
+      name: article.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Hustler Point',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.hustlerpoint.xyz/logo.png',
+      },
+    },
+    datePublished: article.publishedDate,
+    dateModified: article.publishedDate, // Assuming no updates for now
+    description: article.metaDescription || article.excerpt,
+  };
+
 
   return (
+    <>
+    <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         
@@ -94,5 +165,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </aside>
       </div>
     </div>
+    </>
   );
 }

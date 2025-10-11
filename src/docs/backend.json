@@ -4,75 +4,52 @@
     "Article": {
       "title": "Article",
       "type": "object",
-      "description": "Represents a blog article.",
+      "description": "Represents a blog article, with content sourced from Markdown files.",
       "properties": {
         "title": {
           "type": "string",
-          "description": "Title of the article."
+          "description": "Title of the article, from frontmatter."
         },
         "content": {
-          "type": "object",
-          "description": "The full content of the article in Editor.js format."
+          "type": "string",
+          "description": "The full content of the article in markdown format."
         },
         "author": {
           "type": "string",
-          "description": "Author of the article."
+          "description": "Author of the article, from frontmatter."
         },
         "category": {
           "type": "string",
-          "description": "The category of the article."
+          "description": "The category of the article, from frontmatter."
         },
         "slug": {
           "type": "string",
-          "description": "URL-friendly slug for the article."
+          "description": "URL-friendly slug, derived from the filename."
         },
         "keywords": {
           "type": "string",
-          "description": "Comma-separated keywords for SEO."
+          "description": "Comma-separated keywords for SEO, from frontmatter."
         },
         "metaDescription": {
           "type": "string",
-          "description": "Meta description for SEO."
+          "description": "Meta description for SEO, from frontmatter."
         },
         "canonicalUrl": {
           "type": "string",
-          "description": "Canonical URL if the content is republished."
+          "description": "Canonical URL if the content is republished, from frontmatter."
         },
         "publishedDate": {
           "type": "string",
           "format": "date-time",
-          "description": "The date the article was published."
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of when the article was created."
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of when the article was last updated."
-        },
-        "status": {
-          "type": "string",
-          "enum": ["draft", "published", "scheduled"],
-          "description": "The publishing status of the article."
+          "description": "The date the article was published, from frontmatter."
         },
         "featured": {
           "type": "boolean",
-          "description": "Whether the article is a featured post."
+          "description": "Whether the article is a featured post, from frontmatter."
         },
         "imageId": {
           "type": "string",
           "description": "ID for the placeholder image."
-        },
-        "engagement": {
-            "type": "number",
-            "description": "Metric for user engagement."
-        },
-        "excerpt": {
-            "type": "string",
-            "description": "A short summary of the article."
         }
       },
       "required": [
@@ -81,118 +58,11 @@
         "slug",
         "author",
         "category",
-        "status",
-        "publishedDate",
-        "createdAt",
-        "updatedAt"
+        "publishedDate"
       ]
-    },
-    "Category": {
-      "title": "Category",
-      "type": "object",
-      "description": "Represents a category for articles.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Name of the category."
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the category."
-        }
-      },
-      "required": [
-        "name"
-      ]
-    },
-    "NewsletterSubscriber": {
-      "title": "NewsletterSubscriber",
-      "type": "object",
-      "description": "Represents a newsletter subscriber.",
-      "properties": {
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Email address of the subscriber."
-        },
-        "subscriptionDate": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Date and time the user subscribed."
-        }
-      },
-      "required": [
-        "email",
-        "subscriptionDate"
-      ]
-    },
-    "Admin": {
-      "title": "Admin",
-      "type": "object",
-      "description": "Represents an admin user.",
-      "properties": {
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Email address of the admin."
-        }
-      },
-      "required": [
-        "email"
-      ]
-    },
-    "Settings": {
-      "title": "Settings",
-      "type": "object",
-      "description": "Represents the publication settings.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The name of the publication."
-        },
-        "description": {
-          "type": "string",
-          "description": "A short description of the publication."
-        }
-      },
-      "required": ["name", "description"]
     }
   },
   "auth": {
-    "providers": [
-      "password"
-    ]
-  },
-  "firestore": {
-    "/articles/{articleId}": {
-      "schema": {
-        "$ref": "#/entities/Article"
-      },
-      "description": "Stores all blog articles. Each document is an article."
-    },
-    "/categories/{categoryId}": {
-      "schema": {
-        "$ref": "#/entities/Category"
-      },
-      "description": "Stores article categories."
-    },
-    "/newsletter_subscribers/{subscriberId}": {
-      "schema": {
-        "$ref": "#/entities/NewsletterSubscriber"
-      },
-      "description": "Stores newsletter subscribers."
-    },
-    "/admins/{userId}": {
-      "schema": {
-        "$ref": "#/entities/Admin"
-      },
-      "description": "Stores admin users. The document ID is the user's UID."
-    },
-    "/settings/{settingsId}": {
-        "schema": {
-            "$ref": "#/entities/Settings"
-        },
-        "description": "Stores publication settings as a singleton document (e.g., ID 'main')."
-    }
+    "providers": []
   }
 }

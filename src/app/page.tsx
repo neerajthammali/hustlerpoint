@@ -1,10 +1,9 @@
-'use client';
+
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import ArticleCard from '@/components/article-card';
 import { type Article } from '@/lib/types';
-import { useEffect, useState } from 'react';
 import { getAllArticles } from '@/lib/articles';
 import { TestimonialsCarousel } from '@/components/testimonials';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,24 +26,13 @@ const expertiseAreas = [
   },
 ]
 
-export default function Home() {
-  const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export default async function Home() {
+  const allArticles = await getAllArticles();
+  
+  const editorsPicksSlugs = ['the-art-of-the-pitch-deck', '5-ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
+  const editorsPicks = allArticles.filter(article => editorsPicksSlugs.includes(article.slug));
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      setIsLoading(true);
-      const allArticles = await getAllArticles();
-      
-      const editorsPicksSlugs = ['the-art-of-the-pitch-deck', '5-ai-tools-that-will-10x-your-productivity', 'from-side-hustle-to-main-gig'];
-      const picks = allArticles.filter(article => editorsPicksSlugs.includes(article.slug));
-
-      setEditorsPicks(picks);
-      setIsLoading(false);
-    };
-
-    fetchArticles();
-  }, []);
+  const isLoading = false; // Data is pre-fetched on the server
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24">

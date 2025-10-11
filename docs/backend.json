@@ -41,8 +41,8 @@
           "description": "Title of the article."
         },
         "content": {
-          "type": "object",
-          "description": "The full content of the article in Editor.js format."
+          "type": "string",
+          "description": "The full content of the article in markdown format."
         },
         "author": {
           "type": "string",

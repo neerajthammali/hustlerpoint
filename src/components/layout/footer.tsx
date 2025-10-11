@@ -1,8 +1,6 @@
-"use client";
 
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import { useEffect, useState } from "react";
 import { getAllArticles } from "@/lib/articles";
 import { Github, Linkedin } from "lucide-react";
 import React from "react";
@@ -31,17 +29,9 @@ const socialLinks = [
     { href: "https://github.com", label: "GitHub", icon: <Github /> },
 ]
 
-export function Footer() {
-  const [categories, setCategories] = useState<string[]>([]);
-  
-  useEffect(() => {
-    async function fetchCategories() {
-      const articles = await getAllArticles();
-      const uniqueCategories = [...new Set(articles.map(article => article.category))];
-      setCategories(uniqueCategories);
-    }
-    fetchCategories();
-  }, []);
+export async function Footer() {
+  const articles = await getAllArticles();
+  const categories = [...new Set(articles.map(article => article.category))];
 
   return (
     <footer className="border-t bg-card">

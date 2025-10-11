@@ -1,52 +1,16 @@
-'use client';
-import { useState, useEffect } from 'react';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { type Article } from '@/lib/types';
-import { Skeleton } from './ui/skeleton';
 import { getAllArticles } from '@/lib/articles';
 
-export function TrendingArticles({ currentArticleSlug }: { currentArticleSlug?: string }) {
-  const [trendingArticles, setTrendingArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export async function TrendingArticles({ currentArticleSlug }: { currentArticleSlug?: string }) {
+  const allArticles = (await getAllArticles()).filter(a => a.slug !== currentArticleSlug);
 
-  useEffect(() => {
-    const fetchTrendingArticles = async () => {
-      setIsLoading(true);
-      
-      const allArticles = (await getAllArticles()).filter(a => a.slug !== currentArticleSlug);
-
-      const sortedArticles = allArticles
-        .sort((a, b) => b.engagement - a.engagement)
-        .slice(0, 3);
-      
-      setTrendingArticles(sortedArticles);
-      setIsLoading(false);
-    };
-
-    fetchTrendingArticles();
-  }, [currentArticleSlug]);
-
-
-  if (isLoading) {
-      return (
-          <div>
-              <h3 className="mb-4 font-headline text-xl font-bold">Trending Articles</h3>
-              <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                      <div key={i} className="flex items-center space-x-4">
-                          <Skeleton className="h-16 w-16 rounded-lg" />
-                          <div className="space-y-2">
-                              <Skeleton className="h-4 w-40" />
-                              <Skeleton className="h-4 w-24" />
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      );
-  }
+  const trendingArticles = allArticles
+    .sort((a, b) => b.engagement - a.engagement)
+    .slice(0, 3);
   
   if (!trendingArticles || trendingArticles.length === 0) {
     return (
