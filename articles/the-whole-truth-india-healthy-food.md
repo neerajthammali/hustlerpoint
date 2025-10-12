@@ -4,7 +4,7 @@ slug: "the-whole-truth-india-healthy-food"
 description: "How The Whole Truth Foods is transforming India’s healthy eating space with transparency, taste, and trust — setting new benchmarks for the food industry."
 author: "Neeraj Kumar"
 publisher: "Hustlers Point"
-date: "2025-10-11"
+date: "September 8, 2024"
 modified_date: "2025-10-11"
 category: "Brands & Startups"
 tags: ["Healthy Food", "Startup", "India", "D2C", "Nutrition"]
