@@ -4,7 +4,7 @@ slug: "jamnagar-refinery-ambani-wealth"
 description: "Explore the massive Jamnagar Refinery, the world's largest oil complex, and how it became the backbone of Ambani's generational wealth."
 author: "Neeraj Kumar"
 publisher: "Hustlers Point"
-date: "2025-10-11"
+date: "February 19, 2025"
 modified_date: "2025-10-11"
 category: "Business & Industry"
 tags: ["Oil Refinery", "Ambani", "India", "Industry", "Wealth"]
