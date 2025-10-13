@@ -1,4 +1,3 @@
-
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +31,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return {};
   }
   
-  const imageUrl = article.image ? new URL(article.image, 'https://www.hustlerpoint.xyz').toString() : '/og-image.png';
+  const imageUrl = article.image ? new URL(article.image, 'https://hustlerspoint.vercel.app').toString() : '/og-image.png';
 
   return {
     title: article.title,
@@ -80,7 +79,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: article.title,
-    image: image ? new URL(image, 'https://www.hustlerpoint.xyz').toString() : undefined,
+    image: image ? new URL(image, 'https://hustlerspoint.vercel.app').toString() : undefined,
     author: {
       '@type': 'Person',
       name: article.author,
@@ -90,7 +89,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       name: article.publisher || 'Hustler Point',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.hustlerpoint.xyz/logo.png',
+        url: 'https://hustlerspoint.vercel.app/logo.png',
       },
     },
     datePublished: article.publishedDate,
