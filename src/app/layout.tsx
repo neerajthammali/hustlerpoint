@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -27,11 +26,11 @@ export const metadata: Metadata = {
     template: '%s | Hustler Point',
   },
   description: 'A creator platform for writers, founders, and learners to share powerful insights, grow an audience, and monetize their ideas with smart, AI-powered tools.',
-  metadataBase: new URL('https://www.hustlerpoint.xyz'), // Replace with your actual domain
+  metadataBase: new URL('https://hustlerspoint.vercel.app'), // Replace with your actual domain
   openGraph: {
     title: 'Hustler Point',
     description: 'The platform for creators, founders, and learners to build their impact.',
-    url: 'https://www.hustlerpoint.xyz',
+    url: 'https://hustlerspoint.vercel.app',
     siteName: 'Hustler Point',
     images: [
       {
