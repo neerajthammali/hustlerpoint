@@ -1,11 +1,9 @@
+import { NextResponse } from 'next/server';
 import { SitemapStream, streamToPromise } from 'sitemap';
-import { createWriteStream } from 'fs';
-import path from 'path';
 
-// Your live site URL
 const siteUrl = 'https://hustlerspoint.vercel.app';
 
-// List of all key pages (add/edit anytime)
+// Add more pages for better Google coverage: include key static pages, main dynamic pages, and popular blog post URLs if possible.
 const pages = [
   '',               // homepage
   'about',
@@ -13,29 +11,33 @@ const pages = [
   'blog',
   'services',
   'privacy-policy',
+  // Add any additional important pages for SEO below:
+  'terms-of-service',
 ];
 
-async function generate() {
+export async function GET() {
   const sitemap = new SitemapStream({ hostname: siteUrl });
 
-  pages.forEach((page) => {
+  for (const page of pages) {
     sitemap.write({
       url: `/${page}`,
       changefreq: 'weekly',
       priority: page === '' ? 1.0 : 0.8,
+      lastmod: new Date().toISOString(),
     });
-  });
+  }
 
   sitemap.end();
 
   const xml = await streamToPromise(sitemap);
-  const filePath = path.resolve('./public/sitemap.xml');
 
-  createWriteStream(filePath).write(xml);
-  console.log('✅  Sitemap generated at public/sitemap.xml');
+  return new NextResponse(xml, {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/xml',
+      // Google recommends UTF-8 encoding
+      'X-Robots-Tag': 'index, follow',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+    },
+  });
 }
-
-generate().catch((err) => {
-  console.error('❌  Error generating sitemap:', err);
-  process.exit(1);
-});
