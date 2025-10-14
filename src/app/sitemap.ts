@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllArticles } from '@/lib/articles';
 
-const URL = 'https://hustlerspoint.vercel.app'; // Replace with your domain
+const URL = 'https://hustlerspoint.vercel.app/'; // Replace with your domain
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await getAllArticles();
