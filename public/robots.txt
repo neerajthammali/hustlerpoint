@@ -1,7 +1,5 @@
 User-agent: Googlebot
 Disallow:
-
-User-agent: *
 Allow: /
 
 Sitemap: https://www.hustlerspoint.vercel.app/sitemap.xml
