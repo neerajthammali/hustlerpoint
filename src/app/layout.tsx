@@ -58,6 +58,26 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${poppins.variable}`}>
       <head>
+        {/* JSON-LD Organization schema for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'HustlersPoint',
+            url: 'https://hustlerspoint.vercel.app',
+            logo: 'https://hustlerspoint.vercel.app/logo.png',
+            sameAs: [
+              'https://twitter.com/hustlerspoint',
+              'https://github.com/neerajthammali'
+            ],
+            contactPoint: [{
+              '@type': 'ContactPoint',
+              email: 'contact@hustlerspoint.vercel.app',
+              contactType: 'customer support'
+            }]
+          }) }}
+        />
       </head>
       <body className={cn('font-body antialiased')}>
           <div className="relative flex min-h-dvh flex-col bg-background">
@@ -66,7 +86,41 @@ export default function RootLayout({
             <Footer />
             <Toaster />
           </div>
-          <Script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer />
+            <Script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer />
+
+            {/* Inline web-vitals sender (collects LCP, CLS, FID/INP) */}
+            <Script id="web-vitals-sender" strategy="afterInteractive">
+              {`(function(){
+    try{
+      function sendMetric(name, value, delta, id){
+        navigator.sendBeacon && navigator.sendBeacon('/api/web-vitals', JSON.stringify({name, value, delta, id, url: location.pathname, ts: Date.now()})) || fetch('/api/web-vitals', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name, value, delta, id, url: location.pathname, ts: Date.now()})});
+      }
+
+      // Observe performance entries
+      if (PerformanceObserver) {
+        const po = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            if (entry.entryType === 'largest-contentful-paint') {
+              sendMetric('LCP', entry.startTime || 0, 0, entry.renderTime || '');
+            }
+            if (entry.entryType === 'layout-shift') {
+              // cumulative shift
+              sendMetric('CLS', entry.value || 0, 0, '');
+            }
+          }
+        });
+        try{ po.observe({type: 'largest-contentful-paint', buffered: true}); }catch(e){}
+        try{ po.observe({type: 'layout-shift', buffered: true}); }catch(e){}
+      }
+
+      // First Input Delay / Interaction to Next Paint approximation
+      addEventListener('pointerdown', function onFirst(){
+        sendMetric('FID', 0, 0, 'first-input');
+        removeEventListener('pointerdown', onFirst);
+      }, {once:true, passive:true});
+    }catch(e){console.warn(e)}
+  })();`}
+            </Script>
       </body>
     </html>
   );
