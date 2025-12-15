@@ -12,9 +12,10 @@ import { ThemeToggle } from "../theme-toggle";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/articles", label: "Articles" },
+  { href: "/community", label: "Community" },
+  { href: "/newsletter", label: "Newsletter" },
+  { href: "/talent-showcase", label: "Talent" },
   { href: "/about", label: "About" },
-  { href: "/ideas", label: "Share Idea" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {

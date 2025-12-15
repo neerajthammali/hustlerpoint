@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import placeholderImages from '@/lib/placeholder-images.json';
+import { FadeInOnScroll, StaggerContainer, StaggerItem } from '@/components/animations';
 
 const whatWeDo = [
   { icon: <Mail className="h-6 w-6 text-primary" />, title: 'Exclusive Newsletter', description: 'Curated startup insights, actionable growth tips, and real-world case studies delivered to your inbox.' },
